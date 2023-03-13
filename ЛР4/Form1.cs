@@ -31,7 +31,7 @@ namespace ЛР4
 
         private void pict_box_MouseClick(object sender, MouseEventArgs e)
         {
-            Ccircle c = new Ccircle(e.X, e.Y);
+ //           Ccircle c = new Ccircle(e.X, e.Y);
            
         }
 
