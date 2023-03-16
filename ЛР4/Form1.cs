@@ -2,6 +2,7 @@ using System.Security.Cryptography.X509Certificates;
 using System;
 using static List;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace ЛР4
 {
@@ -69,22 +70,7 @@ namespace ЛР4
             }
         }
 
-        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Delete)
-            {
-                for (Node<Ccircle> i = list.first; i != null; i = i.pos)
-                {
-                    if (i.val.check)
-                    {
-                        list.remove(i.val);
-                    }
-                }
-            }
-            pict_box.Refresh();
-        }
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyData == Keys.Delete)
             {
@@ -97,6 +83,26 @@ namespace ЛР4
                 }
             }
             pict_box.Refresh();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Delete)
+            {
+                for (Node<Ccircle> i = list.first; i != null; i = i.pos)
+                {
+                    if (i.val.check)
+                    {
+                        list.remove(i.val);
+                        if (list.get_size() != 0)
+                        {
+                            list.last.val.check = true;
+                        }
+                    }
+                }
+            }
+            pict_box.Refresh();
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

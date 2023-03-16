@@ -134,8 +134,16 @@
 				}
 				else if (f == 0)
 				{
+					if (size == 1)
+					{
+					first = null;
+					last = null;
+					}
+					else
+					{
 					first = first.pos;
 					first.prev = null;
+					}
 				}
 				else if (f == size - 1)
 				{
