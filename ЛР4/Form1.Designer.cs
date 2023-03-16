@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.pict_box = new System.Windows.Forms.PictureBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.ch_box_ctrl = new System.Windows.Forms.CheckBox();
+            this.ch_box_hight = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pict_box)).BeginInit();
             this.SuspendLayout();
@@ -46,25 +46,25 @@
             this.pict_box.Paint += new System.Windows.Forms.PaintEventHandler(this.pict_box_Paint);
             this.pict_box.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pict_box_MouseClick);
             // 
-            // checkBox1
+            // ch_box_ctrl
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(606, 124);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(101, 24);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.ch_box_ctrl.AutoSize = true;
+            this.ch_box_ctrl.Location = new System.Drawing.Point(570, 90);
+            this.ch_box_ctrl.Name = "ch_box_ctrl";
+            this.ch_box_ctrl.Size = new System.Drawing.Size(64, 24);
+            this.ch_box_ctrl.TabIndex = 1;
+            this.ch_box_ctrl.Text = "CTRL";
+            this.ch_box_ctrl.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // ch_box_hight
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(628, 190);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(101, 24);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "checkBox2";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.ch_box_hight.AutoSize = true;
+            this.ch_box_hight.Location = new System.Drawing.Point(570, 135);
+            this.ch_box_hight.Name = "ch_box_hight";
+            this.ch_box_hight.Size = new System.Drawing.Size(204, 24);
+            this.ch_box_hight.TabIndex = 2;
+            this.ch_box_hight.Text = "Выделение пересечения";
+            this.ch_box_hight.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -81,8 +81,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.ch_box_hight);
+            this.Controls.Add(this.ch_box_ctrl);
             this.Controls.Add(this.pict_box);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -96,8 +96,8 @@
         #endregion
 
         private PictureBox pict_box;
-        private CheckBox checkBox1;
-        private CheckBox checkBox2;
+        private CheckBox ch_box_ctrl;
+        private CheckBox ch_box_hight;
         private Button button1;
     }
 }
