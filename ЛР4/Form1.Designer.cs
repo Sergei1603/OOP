@@ -31,7 +31,6 @@
             this.pict_box = new System.Windows.Forms.PictureBox();
             this.ch_box_ctrl = new System.Windows.Forms.CheckBox();
             this.ch_box_hight = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pict_box)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,21 +65,11 @@
             this.ch_box_hight.Text = "Выделение пересечения";
             this.ch_box_hight.UseVisualStyleBackColor = true;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(622, 292);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.ch_box_hight);
             this.Controls.Add(this.ch_box_ctrl);
             this.Controls.Add(this.pict_box);
@@ -98,6 +87,5 @@
         private PictureBox pict_box;
         private CheckBox ch_box_ctrl;
         private CheckBox ch_box_hight;
-        private Button button1;
     }
 }

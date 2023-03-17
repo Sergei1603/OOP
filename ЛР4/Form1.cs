@@ -11,7 +11,6 @@ namespace ЛР4
 		MyList<Ccircle> list = new MyList<Ccircle>();
 		public class Ccircle
 		{
-			public int d = 50;
 			public int r = 25;
 			public int x;
 			public int y;
@@ -24,10 +23,10 @@ namespace ЛР4
 			}
 			public void paint_Ccircle(PaintEventArgs e)
 			{
-				e.Graphics.FillEllipse(Brushes.Red, x - r, y - r, d, d);
+				e.Graphics.FillEllipse(Brushes.Red, x - r, y - r, r * 2,r * 2 );
 				if (check)
 				{
-					e.Graphics.DrawEllipse(new Pen(System.Drawing.Color.Green, 5), x - r, y - r, d, d);
+					e.Graphics.DrawEllipse(new Pen(System.Drawing.Color.Green, 5), x - r, y - r, r * 2, r * 2);
 				}
 			}
 			public override bool Equals(object obj)
@@ -62,7 +61,7 @@ namespace ЛР4
 
 		private void pict_box_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (Control.ModifierKeys == Keys.Control || ch_box_ctrl.Checked)
+			if (Control.ModifierKeys == Keys.Control && ch_box_ctrl.Checked)
 			{
 				for (Node<Ccircle> i = list.first; i != null; i = i.pos)
 				{
@@ -122,10 +121,6 @@ namespace ЛР4
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-            if (Control.ModifierKeys == Keys.Control)
-            {
-                ch_box_ctrl.Checked = !ch_box_ctrl.Checked;
-            }
             if (keyData == Keys.Delete)
 			{
 				for (Node<Ccircle> i = list.first; i != null; i = i.pos)
