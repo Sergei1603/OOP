@@ -28,58 +28,56 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pict_box = new System.Windows.Forms.PictureBox();
-            this.ch_box_ctrl = new System.Windows.Forms.CheckBox();
-            this.ch_box_hight = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pict_box)).BeginInit();
-            this.SuspendLayout();
+            pict_box = new PictureBox();
+            ch_box_ctrl = new CheckBox();
+            ch_box_hight = new CheckBox();
+            ((System.ComponentModel.ISupportInitialize)pict_box).BeginInit();
+            SuspendLayout();
             // 
             // pict_box
             // 
-            this.pict_box.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pict_box.Location = new System.Drawing.Point(34, 30);
-            this.pict_box.Name = "pict_box";
-            this.pict_box.Size = new System.Drawing.Size(472, 372);
-            this.pict_box.TabIndex = 0;
-            this.pict_box.TabStop = false;
-            this.pict_box.Paint += new System.Windows.Forms.PaintEventHandler(this.pict_box_Paint);
-            this.pict_box.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pict_box_MouseClick);
+            pict_box.BorderStyle = BorderStyle.FixedSingle;
+            pict_box.Location = new Point(34, 30);
+            pict_box.Name = "pict_box";
+            pict_box.Size = new Size(472, 372);
+            pict_box.TabIndex = 0;
+            pict_box.TabStop = false;
+            pict_box.Paint += pict_box_Paint;
+            pict_box.MouseClick += pict_box_MouseClick;
             // 
             // ch_box_ctrl
             // 
-            this.ch_box_ctrl.AutoSize = true;
-            this.ch_box_ctrl.Location = new System.Drawing.Point(570, 90);
-            this.ch_box_ctrl.Name = "ch_box_ctrl";
-            this.ch_box_ctrl.Size = new System.Drawing.Size(64, 24);
-            this.ch_box_ctrl.TabIndex = 1;
-            this.ch_box_ctrl.Text = "CTRL";
-            this.ch_box_ctrl.UseVisualStyleBackColor = true;
+            ch_box_ctrl.AutoSize = true;
+            ch_box_ctrl.Location = new Point(570, 90);
+            ch_box_ctrl.Name = "ch_box_ctrl";
+            ch_box_ctrl.Size = new Size(64, 24);
+            ch_box_ctrl.TabIndex = 1;
+            ch_box_ctrl.Text = "CTRL";
+            ch_box_ctrl.UseVisualStyleBackColor = true;
             // 
             // ch_box_hight
             // 
-            this.ch_box_hight.AutoSize = true;
-            this.ch_box_hight.Location = new System.Drawing.Point(570, 135);
-            this.ch_box_hight.Name = "ch_box_hight";
-            this.ch_box_hight.Size = new System.Drawing.Size(204, 24);
-            this.ch_box_hight.TabIndex = 2;
-            this.ch_box_hight.Text = "Выделение пересечения";
-            this.ch_box_hight.UseVisualStyleBackColor = true;
+            ch_box_hight.AutoSize = true;
+            ch_box_hight.Location = new Point(570, 135);
+            ch_box_hight.Name = "ch_box_hight";
+            ch_box_hight.Size = new Size(204, 24);
+            ch_box_hight.TabIndex = 2;
+            ch_box_hight.Text = "Выделение пересечения";
+            ch_box_hight.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.ch_box_hight);
-            this.Controls.Add(this.ch_box_ctrl);
-            this.Controls.Add(this.pict_box);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Form1_PreviewKeyDown);
-            ((System.ComponentModel.ISupportInitialize)(this.pict_box)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(ch_box_hight);
+            Controls.Add(ch_box_ctrl);
+            Controls.Add(pict_box);
+            Name = "Form1";
+            Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)pict_box).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
