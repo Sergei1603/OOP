@@ -75,6 +75,8 @@
             Controls.Add(pict_box);
             Name = "Form1";
             Text = "Form1";
+            KeyDown += Form1_KeyDown;
+            KeyUp += Form1_KeyUp;
             ((System.ComponentModel.ISupportInitialize)pict_box).EndInit();
             ResumeLayout(false);
             PerformLayout();

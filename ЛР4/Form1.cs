@@ -48,46 +48,49 @@ namespace ЛР4
             }
         }
 
-        //        Ccircle c = new Ccircle(10, 50);
         public Form1()
         {
             InitializeComponent();
+            this.KeyPreview = true;
         }
 
 
         private void pict_box_MouseClick(object sender, MouseEventArgs e)
         {
-            if (Control.ModifierKeys == Keys.Control && ch_box_ctrl.Checked)
+            //if (Control.ModifierKeys == Keys.Control && ch_box_ctrl.Checked)
+            //{
+            //    for (Node<Ccircle> i = list.first; i != null; i = i.pos)
+            //    {
+            //        i.val.check = true;
+            //    }
+            //}
+            //else
+            //{
+            bool f = true;
+            for (Node<Ccircle> i = list.last; i != null; i = i.prev)
             {
-                for (Node<Ccircle> i = list.first; i != null; i = i.pos)
+                if (i.val.Is_inside(e.X, e.Y))
                 {
-                    i.val.check = true;
-                }
-            }
-            else
-            {
-                bool f = true;
-                for (Node<Ccircle> i = list.last; i != null; i = i.prev)
-                {
-                    if (i.val.Is_inside(e.X, e.Y))
+                    f = false;
+                    if (Control.ModifierKeys == Keys.Control)
                     {
-                        i.val.check = !(i.val.check);
-                        f = false;
+                        //                       ch_box_ctrl.Checked = true;
+                        i.val.check = true;
                         if (!ch_box_hight.Checked)
                         {
                             break;
                         }
                     }
                 }
-                if (f)
+            }
+            if (f)
+            {
+                if (list.last != null)
                 {
-                    if (list.last != null)
-                    {
-                        list.last.val.check = false;
-                    }
-                    Ccircle c = new Ccircle(e.X, e.Y);
-                    list.PushBack(c);
+                    list.last.val.check = false;
                 }
+                Ccircle c = new Ccircle(e.X, e.Y);
+                list.PushBack(c);
             }
             pict_box.Refresh();
         }
@@ -100,9 +103,9 @@ namespace ЛР4
             }
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (keyData == Keys.Delete)
+            if (e.KeyData == Keys.Delete)
             {
                 for (Node<Ccircle> i = list.first; i != null; i = i.pos)
                 {
@@ -117,7 +120,18 @@ namespace ЛР4
                 }
             }
             pict_box.Refresh();
-            return base.ProcessCmdKey(ref msg, keyData);
+            if (e.KeyCode == Keys.ControlKey)
+            {
+                ch_box_ctrl.Checked = true;
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ControlKey)
+            {
+                ch_box_ctrl.Checked = false;
+            }
         }
     }
 }
