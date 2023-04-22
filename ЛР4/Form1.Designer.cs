@@ -31,6 +31,7 @@
             pict_box = new PictureBox();
             ch_box_ctrl = new CheckBox();
             ch_box_hight = new CheckBox();
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)pict_box).BeginInit();
             SuspendLayout();
             // 
@@ -65,11 +66,21 @@
             ch_box_hight.Text = "Выделение пересечения";
             ch_box_hight.UseVisualStyleBackColor = true;
             // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Круг", "Квадрат", "Треугольник", "Шестиугольник" });
+            comboBox1.Location = new Point(581, 248);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(151, 28);
+            comboBox1.TabIndex = 3;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBox1);
             Controls.Add(ch_box_hight);
             Controls.Add(ch_box_ctrl);
             Controls.Add(pict_box);
@@ -87,5 +98,6 @@
         private PictureBox pict_box;
         private CheckBox ch_box_ctrl;
         private CheckBox ch_box_hight;
+        private ComboBox comboBox1;
     }
 }
