@@ -8,23 +8,33 @@ namespace ЛР4
 {
 	public partial class Form1 : Form
 	{
-		MyList<Ccircle> list = new MyList<Ccircle>();
-		public class Ccircle
+		MyList<shape> list = new MyList<shape>();
+
+
+		public abstract class shape
 		{
-			public int r = 25;
 			public int x;
 			public int y;
-			public bool check;
+            public bool _check;
+			public abstract void paint_shape(PaintEventArgs e);
+			public abstract bool Is_inside(int x, int y);
+			public abstract void uncheck();
+			public abstract void check();
+
+		}
+		public class Ccircle :  shape
+		{
+			public int r = 25;
 			public Ccircle(int x, int y)
 			{
 				this.x = x;
 				this.y = y;
-				check = true;
+				_check = true;
 			}
-			public void paint_Ccircle(PaintEventArgs e)
+			public override void paint_shape(PaintEventArgs e)
 			{
 				e.Graphics.FillEllipse(Brushes.Red, x - r, y - r, r * 2, r * 2);
-				if (check)
+				if (_check)
 				{
 					e.Graphics.DrawEllipse(new Pen(System.Drawing.Color.Green, 5), x - r, y - r, r * 2, r * 2);
 				}
@@ -38,7 +48,7 @@ namespace ЛР4
 				Ccircle p = (Ccircle)obj;
 				return (x == p.x) && (y == p.y);
 			}
-			public bool Is_inside(int x, int y)
+			public override bool Is_inside(int x, int y)
 			{
 				if ((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y) <= r * r)
 				{
@@ -46,7 +56,15 @@ namespace ЛР4
 				}
 				return false;
 			}
-		}
+			public override void uncheck()
+			{
+				_check = false;
+			}
+            public override void check()
+            {
+                _check = true;
+            }
+        }
 
 		public Form1()
 		{
@@ -60,18 +78,20 @@ namespace ЛР4
 			bool inside = false;
 			if (Control.ModifierKeys != Keys.Control)
 			{
-				for (Node<Ccircle> j = list.last; j != null; j = j.prev)
+				for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
 				{
-					j.val.check = false;
+					i.getCurrentItem().uncheck();
+//					i.cur_item.val.check = false;
+			//		j.val.check = false;
 				}
 			}
 
-			for (Node<Ccircle> i = list.last; i != null; i = i.prev)
-			{
-				if (i.val.Is_inside(e.X, e.Y))
+            for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+            {
+				if (i.getCurrentItem().Is_inside(e.X, e.Y))
 				{
 					inside = true;
-					i.val.check = true;
+					i.getCurrentItem().check();
 					if (!ch_box_hight.Checked)
 						break;
 				}
@@ -86,9 +106,9 @@ namespace ЛР4
 
 		private void pict_box_Paint(object sender, PaintEventArgs e)
 		{
-			for (Node<Ccircle> i = list.first; i != null; i = i.pos)
-			{
-				i.val.paint_Ccircle(e);
+            for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+            {
+				i.getCurrentItem().paint_shape(e);
 			}
 		}
 
@@ -96,13 +116,21 @@ namespace ЛР4
 		{
 			if (e.KeyData == Keys.Delete)
 			{
-				for (Node<Ccircle> i = list.first; i != null; i = i.pos)
-				{
-					if (i.val.check)
+                for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+                {
+					if (i.getCurrentItem()._check)
 					{
-						if (i.prev != null)
-							i.prev.val.check = true;
-						list.remove(i.val);
+						//       Iterator<shape> j = ;
+						//j.previos();
+						//i.previos();
+						//i.cur_item.prev
+						Iterator<shape> j = i.clone();
+						j.previos();
+                        if (j.cur_item != null)
+							j.getCurrentItem().check();
+						//	list.remove(i.getCurrentItem());
+					//	i.next();
+						i.remove();
 					}
 				}
 			}

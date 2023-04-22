@@ -1,5 +1,5 @@
-﻿	internal class List
-	{
+﻿public  class List
+{
 		public class Node<T>
 		{
 			public Node<T> prev;
@@ -27,8 +27,12 @@
 				first = null;
 				size = 0;
 			}
+        public Iterator<T> CreateIterator()
+        {
+            return new Standart_Iterator<T>(this);
+        }
 
-			public void PushBack(T v)
+        public void PushBack(T v)
 			{
 				if (size != 0)
 				{
@@ -170,4 +174,77 @@
 				size = 0;
 			}
 		};
+
+	public abstract class Iterator<T>
+	{
+        public MyList<T> list;
+        public Node<T> cur_item;
+        public int cur_index;
+        public abstract void first();
+		public abstract T getCurrentItem();
+		public abstract void setCurrentItem(T item);
+		public abstract void next();
+		public abstract void previos();
+		public abstract bool isEOL();
+		public abstract void remove();
+		public abstract Iterator<T> clone();
+	}
+
+	public class Standart_Iterator<T>: Iterator<T>
+	{
+		//public MyList<T> list;
+		//public Node<T> cur_item;
+		//public int cur_index;
+		public Standart_Iterator(MyList<T> l)
+		{
+			list = l;
+			cur_index = 0;
+			cur_item = list.first;
+	
+		}
+		public Standart_Iterator(Iterator<T> i)
+		{
+			list = i.list;
+			cur_index = i.cur_index;
+			cur_item = i.cur_item;
+		}
+
+        public override Iterator<T> clone()
+		{
+			return new Standart_Iterator<T>(this);
+		}
+
+		public override void first()
+		{
+			cur_item = list.first;
+			cur_index = 0;
+		}
+		public override T getCurrentItem()
+		{
+			return cur_item.val;
+		}
+		public override void setCurrentItem(T item)
+		{
+			list.insert(item, cur_index);
+		}
+		public override void next()
+		{
+				cur_item = cur_item.pos;
+				cur_index++;
+		}
+        public override void previos()
+        {
+
+				cur_item = cur_item.prev;
+				cur_index--;
+        }
+        public override bool isEOL()
+		{
+			return cur_item == null;
+		}
+        public override void remove()
+        {
+			list.remove(cur_item.val);
+        }
+    }
 	}
