@@ -31,8 +31,11 @@
             pict_box = new PictureBox();
             ch_box_ctrl = new CheckBox();
             ch_box_hight = new CheckBox();
-            comboBox1 = new ComboBox();
+            numericUpDown_size = new NumericUpDown();
+            listBox_shape = new ListBox();
+            button_color = new Button();
             ((System.ComponentModel.ISupportInitialize)pict_box).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown_size).BeginInit();
             SuspendLayout();
             // 
             // pict_box
@@ -66,21 +69,44 @@
             ch_box_hight.Text = "Выделение пересечения";
             ch_box_hight.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // numericUpDown_size
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Круг", "Квадрат", "Треугольник", "Шестиугольник" });
-            comboBox1.Location = new Point(581, 248);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(151, 28);
-            comboBox1.TabIndex = 3;
+            numericUpDown_size.Location = new Point(587, 340);
+            numericUpDown_size.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericUpDown_size.Name = "numericUpDown_size";
+            numericUpDown_size.Size = new Size(150, 27);
+            numericUpDown_size.TabIndex = 4;
+            numericUpDown_size.Value = new decimal(new int[] { 25, 0, 0, 0 });
+            numericUpDown_size.ValueChanged += numericUpDown1_ValueChanged;
+            // 
+            // listBox_shape
+            // 
+            listBox_shape.FormattingEnabled = true;
+            listBox_shape.ItemHeight = 20;
+            listBox_shape.Items.AddRange(new object[] { "Круг", "Квадрат", "Треугольник", "Шестиугольник" });
+            listBox_shape.Location = new Point(570, 223);
+            listBox_shape.Name = "listBox_shape";
+            listBox_shape.Size = new Size(150, 44);
+            listBox_shape.TabIndex = 5;
+            // 
+            // button_color
+            // 
+            button_color.BackColor = Color.Green;
+            button_color.Location = new Point(604, 45);
+            button_color.Name = "button_color";
+            button_color.Size = new Size(94, 29);
+            button_color.TabIndex = 6;
+            button_color.UseVisualStyleBackColor = false;
+            button_color.Click += textBox_color_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(comboBox1);
+            Controls.Add(button_color);
+            Controls.Add(listBox_shape);
+            Controls.Add(numericUpDown_size);
             Controls.Add(ch_box_hight);
             Controls.Add(ch_box_ctrl);
             Controls.Add(pict_box);
@@ -89,6 +115,7 @@
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             ((System.ComponentModel.ISupportInitialize)pict_box).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown_size).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -98,6 +125,8 @@
         private PictureBox pict_box;
         private CheckBox ch_box_ctrl;
         private CheckBox ch_box_hight;
-        private ComboBox comboBox1;
+        private NumericUpDown numericUpDown_size;
+        private ListBox listBox_shape;
+        private Button button_color;
     }
 }

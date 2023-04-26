@@ -32,7 +32,9 @@
             return new Standart_Iterator<T>(this);
         }
 
-        public void PushBack(T v)
+		public void PushBack(T v)
+		{
+			if (v != null)
 			{
 				if (size != 0)
 				{
@@ -48,8 +50,11 @@
 				}
 				size++;
 			}
+		}
 
-			public void PushFront(T v)
+		public void PushFront(T v)
+		{
+			if (v != null)
 			{
 				if (size != 0)
 				{
@@ -65,18 +70,21 @@
 				}
 				size++;
 			}
+		}
 
 			public void insert(T v, int plase)
 			{
-				if (plase == 0)
-				{
-					PushFront(v);
-				}
-				else if (plase >= size)
-				{
-					PushBack(v);
-				}
-				else
+			if (plase == 0)
+			{
+				PushFront(v);
+			}
+			else if (plase >= size)
+			{
+				PushBack(v);
+			}
+			else
+			{
+				if (v != null)
 				{
 					Node<T> cur = first;
 					for (int i = 0; i < plase - 1; i++)
@@ -92,6 +100,7 @@
 					p.pos = tmp;
 					size++;
 				}
+			}
 			}
 
 			public T pop_front()
