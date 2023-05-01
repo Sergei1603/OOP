@@ -40,10 +40,11 @@
             // 
             // pict_box
             // 
+            pict_box.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pict_box.BorderStyle = BorderStyle.FixedSingle;
             pict_box.Location = new Point(34, 30);
             pict_box.Name = "pict_box";
-            pict_box.Size = new Size(472, 372);
+            pict_box.Size = new Size(554, 425);
             pict_box.TabIndex = 0;
             pict_box.TabStop = false;
             pict_box.Paint += pict_box_Paint;
@@ -51,8 +52,9 @@
             // 
             // ch_box_ctrl
             // 
+            ch_box_ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ch_box_ctrl.AutoSize = true;
-            ch_box_ctrl.Location = new Point(570, 90);
+            ch_box_ctrl.Location = new Point(652, 90);
             ch_box_ctrl.Name = "ch_box_ctrl";
             ch_box_ctrl.Size = new Size(64, 24);
             ch_box_ctrl.TabIndex = 1;
@@ -61,8 +63,9 @@
             // 
             // ch_box_hight
             // 
+            ch_box_hight.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ch_box_hight.AutoSize = true;
-            ch_box_hight.Location = new Point(570, 135);
+            ch_box_hight.Location = new Point(652, 135);
             ch_box_hight.Name = "ch_box_hight";
             ch_box_hight.Size = new Size(204, 24);
             ch_box_hight.TabIndex = 2;
@@ -71,28 +74,31 @@
             // 
             // numericUpDown_size
             // 
-            numericUpDown_size.Location = new Point(587, 340);
+            numericUpDown_size.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            numericUpDown_size.Location = new Point(652, 326);
             numericUpDown_size.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDown_size.Name = "numericUpDown_size";
             numericUpDown_size.Size = new Size(150, 27);
             numericUpDown_size.TabIndex = 4;
-            numericUpDown_size.Value = new decimal(new int[] { 25, 0, 0, 0 });
+            numericUpDown_size.Value = new decimal(new int[] { 26, 0, 0, 0 });
             numericUpDown_size.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // listBox_shape
             // 
+            listBox_shape.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             listBox_shape.FormattingEnabled = true;
             listBox_shape.ItemHeight = 20;
             listBox_shape.Items.AddRange(new object[] { "Круг", "Квадрат", "Треугольник", "Шестиугольник" });
-            listBox_shape.Location = new Point(570, 223);
+            listBox_shape.Location = new Point(652, 223);
             listBox_shape.Name = "listBox_shape";
             listBox_shape.Size = new Size(150, 44);
             listBox_shape.TabIndex = 5;
             // 
             // button_color
             // 
+            button_color.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button_color.BackColor = Color.Green;
-            button_color.Location = new Point(604, 45);
+            button_color.Location = new Point(686, 45);
             button_color.Name = "button_color";
             button_color.Size = new Size(94, 29);
             button_color.TabIndex = 6;
@@ -103,17 +109,19 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(882, 503);
             Controls.Add(button_color);
             Controls.Add(listBox_shape);
             Controls.Add(numericUpDown_size);
             Controls.Add(ch_box_hight);
             Controls.Add(ch_box_ctrl);
             Controls.Add(pict_box);
+            MinimumSize = new Size(900, 550);
             Name = "Form1";
             Text = "Form1";
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
+            Resize += Form1_Resize;
             ((System.ComponentModel.ISupportInitialize)pict_box).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown_size).EndInit();
             ResumeLayout(false);
