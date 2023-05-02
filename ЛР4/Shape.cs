@@ -20,10 +20,9 @@ public abstract class shape
     {
         _color = color;
     }
-    public void resize(int dx, int width, int height)
+    public void resize(int dx)
     {
         size = dx;
-        corect_position(width, height);
     }
     public virtual void move(Keys k)
     {
@@ -75,5 +74,19 @@ public abstract class poligon_shape: shape
         {
             e.Graphics.DrawPolygon(new Pen(System.Drawing.Color.Red, 3), calculate_vertex());
         }
+    }
+    public override bool Is_inside(int x, int y)
+    {
+        bool result = false;
+		Point[] p = calculate_vertex();
+        int j = p.Length - 1;
+        for (int i = 0; i < p.Length; i++)
+        {
+            if ((((p[i].Y <= y) && (y < p[j].Y)) || ((p[j].Y <= y) && (y < p[i].Y))) &&
+        (((p[j].Y - p[i].Y) != 0) && (x > ((p[j].X - p[i].X) * (y - p[i].Y) / (p[j].Y - p[i].Y) + p[i].X))))
+                result = !result;
+            j = i;
+        }
+		return result;
     }
 }

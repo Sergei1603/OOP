@@ -1,6 +1,6 @@
 ﻿public class Factory
 {
-    List<shape> shapes;
+//    List<shape> shapes;
     public virtual shape create_shape(string code, int x, int y, int size, Color color)
     {
         return null;

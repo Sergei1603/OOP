@@ -27,8 +27,6 @@ namespace ЛР4
                 for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
                 {
                     i.getCurrentItem().uncheck();
-                    //					i.cur_item.val.check = false;
-                    //		j.val.check = false;
                 }
             }
 
@@ -101,13 +99,15 @@ namespace ЛР4
             }
         }
 
+
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
             {
                 if (i.getCurrentItem()._check)
                 {
-                    i.getCurrentItem().resize((int)numericUpDown_size.Value, pict_box.Size.Width, pict_box.Height);
+                    i.getCurrentItem().resize((int)numericUpDown_size.Value);
+                    i.getCurrentItem().corect_position(pict_box.Size.Width, pict_box.Height);
                 }
             }
             pict_box.Refresh();

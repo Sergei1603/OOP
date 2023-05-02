@@ -1,23 +1,23 @@
 ﻿public  class List
 {
-		public class Node<T>
+	public class Node<T>
+	{
+		public Node<T> prev;
+		public Node<T> pos;
+		public T val;
+		public Node(T v)
 		{
-			public Node<T> prev;
-			public Node<T> pos;
-			public T val;
-			public Node(T v)
-			{
-				val = v;
-				prev = null;
-				pos = null;
-				//			Console.WriteLine("Node(T val)");
-			}
+			val = v;
+			prev = null;
+			pos = null;
+		}
 
-		};
+	};
 
-		public class MyList<T>
+	public class MyList<T>
 		{
-			public Node<T> first;
+
+        public Node<T> first;
 			public Node<T> last;
 			int size;
 

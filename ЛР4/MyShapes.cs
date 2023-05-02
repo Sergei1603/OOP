@@ -1,8 +1,8 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 
 	public class Ccircle : shape
 	{
-//		public int d = 50;
 		public Ccircle(int x, int y, int size, Color color)
 		{
 			this.x = x;
@@ -11,7 +11,7 @@
 			this.size = size;
 			_color = color;
 		}
-		public override void paint_shape(PaintEventArgs e)// заменить на один метод в базовом классе, создать метод для расчета вершин
+		public override void paint_shape(PaintEventArgs e)
 		{
 		e.Graphics.FillEllipse(new SolidBrush(_color), x - this.size / 2, y - this.size / 2, this.size, this.size);
 		if (_check)
@@ -31,7 +31,6 @@
 
 public class Square : poligon_shape
 {
-//	public int a = 50;
 	public Square(int x, int y, int size, Color color)
 	{
 		this.x = x;
@@ -43,7 +42,6 @@ public class Square : poligon_shape
 
 	public override Point[] calculate_vertex()
 	{
-
 		Point p0 = new Point(x - size / 2,  y - size / 2);
 		Point p1 = new Point(x - size / 2,  y + size / 2);
 		Point p2 = new Point(x + size / 2,  y + size / 2);
@@ -51,20 +49,9 @@ public class Square : poligon_shape
 		Point[] points = { p0, p1, p2, p3 };
 		return points;
     }
-
-	public override bool Is_inside(int x, int y)
-	{
-		if ((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y) <= size * size)
-		{
-			return true;
-		}
-		return false;
-	}
 }
-
 public class Triangle : poligon_shape
 {
-//	public int a = 50;
 	public Triangle(int x, int y, int size, Color color)
 	{
 		this.x = x;
@@ -82,14 +69,6 @@ public class Triangle : poligon_shape
         Point[] points = { point1, point2, point3 };
 		return points;
     }
-	public override bool Is_inside(int x, int y)
-	{
-		if ((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y) <= size * size)
-		{
-			return true;
-		}
-		return false;
-	}
 
     public override void corect_position(int width, int height)
     {
@@ -114,7 +93,6 @@ public class Triangle : poligon_shape
 
 public class Hexagon : poligon_shape
 {
-//	public int a = 50;
 	public Hexagon(int x, int y, int size, Color color)
     {
         this.x = x;
@@ -136,14 +114,6 @@ public class Hexagon : poligon_shape
 		return points;
     }
 
-	public override bool Is_inside(int x, int y)
-	{
-		if ((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y) <= size * size)
-		{
-			return true;
-		}
-		return false;
-	}
 
     public override void corect_position(int width, int height)
     {
