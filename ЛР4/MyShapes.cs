@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
 
-	public class Ccircle : shape
+	public class Ccircle : figure
 	{
-		public Ccircle(int x, int y, int size, Color color)
+    public Ccircle(int x, int y, int size, Color color)
 		{
 			this.x = x;
 			this.y = y;
@@ -19,7 +19,7 @@ using System.Security.Cryptography.X509Certificates;
 			e.Graphics.DrawEllipse(new Pen(System.Drawing.Color.Red, 3), x - this.size / 2, y - this.size / 2, this.size, this.size);
 		}
 		}
-		public override bool Is_inside(int x, int y)
+		public bool Is_inside(int x, int y)
 		{
 			if ((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y) <= this.size * this.size / 4)
 			{
@@ -70,25 +70,13 @@ public class Triangle : poligon_shape
 		return points;
     }
 
-    public override void corect_position(int width, int height)
+    public override bool Is_Outside(int width, int height)
     {
-        if (x < size / 2)
-        {
-            x = size / 2;
-        }
-        if (y < (int)(size * Math.Sqrt(3) / 3))
-        {
-            y = (int)(size * Math.Sqrt(3)/3);
-        }
-        if (x > width - 3 - size / 2)
-        {
-            x = width - 3 - size / 2;
-        }
-        if (y > height - 3 - (int)(size * Math.Sqrt(3) / 6))
-        {
-            y = height - 3 - (int)(size * Math.Sqrt(3) / 6);
-        }
+        if ((x < size / 2) || (y < (int)(size * Math.Sqrt(3) / 3)) || (x > width - 3 - size / 2) || (y > height - 3 - (int)(size * Math.Sqrt(3) / 6)))
+            return true;
+        return false;
     }
+
 }
 
 public class Hexagon : poligon_shape
@@ -114,24 +102,10 @@ public class Hexagon : poligon_shape
 		return points;
     }
 
-
-    public override void corect_position(int width, int height)
+    public override bool Is_Outside(int width, int height)
     {
-        if (x < (int)(Math.Sqrt(3) * size) / 2)
-        {
-            x = (int)(Math.Sqrt(3) * size) / 2;
-        }
-        if (y < size)
-        {
-			y = size;
-        }
-        if (x > width - 3 - (int)(Math.Sqrt(3) * size) / 2)
-        {
-            x = width - 3 - (int)(Math.Sqrt(3) * size) / 2;
-        }
-        if (y > height - 3 - size)
-        {
-            y = height - 3 - size;
-        }
+        if ((x < (int)(Math.Sqrt(3) * size) / 2) || (y < size) || (x > width - 3 - (int)(Math.Sqrt(3) * size) / 2) || (y > height - 3 - size))
+            return true;
+        return false;
     }
 }

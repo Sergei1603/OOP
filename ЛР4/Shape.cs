@@ -2,12 +2,7 @@
 
 public abstract class shape
 {
-    public int x;
-    public int y;
-    public int size;
     public bool _check;
-    public Color _color = Color.Green;
-    public abstract bool Is_inside(int x, int y);
     public void uncheck()
     {
         _check = false;
@@ -16,15 +11,33 @@ public abstract class shape
     {
         _check = true;
     }
-    public void change_color(Color color)
+    public abstract void change_color(Color color);
+
+    public abstract void resize(int dx);
+
+    public abstract void move(Keys k);
+
+    public abstract bool Is_Outside(int width, int height);
+    public abstract void corect_position();
+
+    public abstract void paint_shape(PaintEventArgs e);
+}
+
+public abstract class figure: shape
+{
+    public int x;
+    public int y;
+    public int size;
+    public Color _color = Color.Green;
+    public override void change_color(Color color)
     {
         _color = color;
     }
-    public void resize(int dx)
+    public override void resize(int dx)
     {
         size = dx;
     }
-    public virtual void move(Keys k)
+    public override void move(Keys k)
     {
         switch (k)
         {
@@ -41,30 +54,22 @@ public abstract class shape
                 break;
         }
     }
-    public virtual void corect_position(int width, int height)
-    {
-        if (x < size / 2)
-        {
-            x = size / 2;
-        }
-        if (y < size / 2)
-        {
-            y = size / 2;
-        }
-        if (x > width - 3 - size / 2)
-        {
-            x = width - 3 - size / 2;
-        }
-        if (y > height - 3 - size / 2)
-        {
-            y = height - 3 - size / 2;
-        }
-    }
-    public abstract void paint_shape(PaintEventArgs e);
 
+    public override bool Is_Outside(int width, int height)
+    {
+        if((x < size / 2) || (y < size / 2) || (x > width - 3 - size / 2) || (y > height - 3 - size / 2))
+            return true;
+        return false;
+    }
+    public override void corect_position()
+    {
+
+            x = size / 2;
+            y = size / 2;
+    }
 }
 
-public abstract class poligon_shape: shape
+public abstract class poligon_shape: figure
 {
     public abstract Point[] calculate_vertex();
     public override void paint_shape(PaintEventArgs e)
@@ -75,7 +80,7 @@ public abstract class poligon_shape: shape
             e.Graphics.DrawPolygon(new Pen(System.Drawing.Color.Red, 3), calculate_vertex());
         }
     }
-    public override bool Is_inside(int x, int y)
+    public bool Is_inside(int x, int y)
     {
         bool result = false;
 		Point[] p = calculate_vertex();
