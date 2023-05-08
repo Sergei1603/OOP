@@ -51,13 +51,13 @@ public abstract class shape
         {
             y = size / 2;
         }
-        if (x > width - size / 2)
+        if (x > width - 3 - size / 2)
         {
-            x = width - size / 2;
+            x = width - 3 - size / 2;
         }
-        if (y > height - size / 2)
+        if (y > height - 3 - size / 2)
         {
-            y = height - size / 2;
+            y = height - 3 - size / 2;
         }
     }
     public abstract void paint_shape(PaintEventArgs e);

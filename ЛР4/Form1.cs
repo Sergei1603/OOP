@@ -10,10 +10,13 @@ namespace ЛР4
 {
     public partial class Form1 : Form
     {
-        MyList<shape> list = new MyList<shape>();
+        public MyList<shape> list = new MyList<shape>();
+        //       storage storage = new storage(list);
+        string filename = "store.txt";
 
         public Form1()
         {
+
             InitializeComponent();
             this.KeyPreview = true;
         }
@@ -36,7 +39,7 @@ namespace ЛР4
                 {
                     inside = true;
                     i.getCurrentItem().check();
-                    if (!ch_box_hight.Checked)
+                    if (!ch_box_intersec.Checked)
                         break;
                 }
             }
@@ -80,7 +83,7 @@ namespace ЛР4
                     if (i.getCurrentItem()._check)
                     {
                         i.getCurrentItem().move(e.KeyData);
-                        i.getCurrentItem().corect_position(pict_box.Size.Width, pict_box.Size.Height);
+                        //                       i.getCurrentItem().corect_position(pict_box.Size.Width, pict_box.Size.Height);
                     }
                 }
             }
@@ -107,7 +110,7 @@ namespace ЛР4
                 if (i.getCurrentItem()._check)
                 {
                     i.getCurrentItem().resize((int)numericUpDown_size.Value);
-                    i.getCurrentItem().corect_position(pict_box.Size.Width, pict_box.Height);
+                    //                   i.getCurrentItem().corect_position(pict_box.Size.Width, pict_box.Height);
                 }
             }
             pict_box.Refresh();
@@ -144,6 +147,13 @@ namespace ЛР4
                 numericUpDown_size.Maximum = pict_box.Size.Width / 2;
             }
             pict_box.Refresh();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            storage storage = new storage(list);
+            Factory factory = new shapeFactory();
+            storage.load(filename, factory);
         }
     }
 }

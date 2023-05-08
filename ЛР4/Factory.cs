@@ -1,10 +1,30 @@
-﻿public class Factory
+﻿using static List;
+
+public class storage
 {
-//    List<shape> shapes;
-    public virtual shape create_shape(string code, int x, int y, int size, Color color)
+    public MyList<shape> list;
+    public storage(MyList<shape> list)
     {
-        return null;
+        this.list = list;
     }
+    public void load(string filename, Factory factory)
+    {
+        StreamReader sr = new StreamReader(filename);
+        string? line;
+        line = sr.ReadLine();
+        while(line != null)
+        {
+            string[] parameters = line.Split();
+   
+            list.PushBack(factory.create_shape(parameters[0], Int32.Parse(parameters[1]), Int32.Parse(parameters[2]), Int32.Parse(parameters[3]), Color.FromName(parameters[4])));
+            line = sr.ReadLine();
+        }
+    }
+}
+
+public abstract class Factory
+{
+    public abstract shape create_shape(string code, int x, int y, int size, Color color);
 }
 public class shapeFactory: Factory
 {

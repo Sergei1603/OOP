@@ -80,13 +80,13 @@ public class Triangle : poligon_shape
         {
             y = (int)(size * Math.Sqrt(3)/3);
         }
-        if (x > width - size / 2)
+        if (x > width - 3 - size / 2)
         {
-            x = width - size / 2;
+            x = width - 3 - size / 2;
         }
-        if (y > height - (int)(size * Math.Sqrt(3) / 6))
+        if (y > height - 3 - (int)(size * Math.Sqrt(3) / 6))
         {
-            y = height - (int)(size * Math.Sqrt(3) / 6);
+            y = height - 3 - (int)(size * Math.Sqrt(3) / 6);
         }
     }
 }
@@ -125,13 +125,13 @@ public class Hexagon : poligon_shape
         {
 			y = size;
         }
-        if (x > width - (int)(Math.Sqrt(3) * size) / 2)
+        if (x > width - 3 - (int)(Math.Sqrt(3) * size) / 2)
         {
-            x = width - (int)(Math.Sqrt(3) * size) / 2;
+            x = width - 3 - (int)(Math.Sqrt(3) * size) / 2;
         }
-        if (y > height - size)
+        if (y > height - 3 - size)
         {
-            y = height - size;
+            y = height - 3 - size;
         }
     }
 }

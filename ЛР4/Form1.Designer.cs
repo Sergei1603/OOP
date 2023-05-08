@@ -30,7 +30,7 @@
         {
             pict_box = new PictureBox();
             ch_box_ctrl = new CheckBox();
-            ch_box_hight = new CheckBox();
+            ch_box_intersec = new CheckBox();
             numericUpDown_size = new NumericUpDown();
             listBox_shape = new ListBox();
             button_color = new Button();
@@ -61,16 +61,16 @@
             ch_box_ctrl.Text = "CTRL";
             ch_box_ctrl.UseVisualStyleBackColor = true;
             // 
-            // ch_box_hight
+            // ch_box_intersec
             // 
-            ch_box_hight.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            ch_box_hight.AutoSize = true;
-            ch_box_hight.Location = new Point(652, 135);
-            ch_box_hight.Name = "ch_box_hight";
-            ch_box_hight.Size = new Size(204, 24);
-            ch_box_hight.TabIndex = 2;
-            ch_box_hight.Text = "Выделение пересечения";
-            ch_box_hight.UseVisualStyleBackColor = true;
+            ch_box_intersec.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            ch_box_intersec.AutoSize = true;
+            ch_box_intersec.Location = new Point(652, 135);
+            ch_box_intersec.Name = "ch_box_intersec";
+            ch_box_intersec.Size = new Size(204, 24);
+            ch_box_intersec.TabIndex = 2;
+            ch_box_intersec.Text = "Выделение пересечения";
+            ch_box_intersec.UseVisualStyleBackColor = true;
             // 
             // numericUpDown_size
             // 
@@ -113,12 +113,13 @@
             Controls.Add(button_color);
             Controls.Add(listBox_shape);
             Controls.Add(numericUpDown_size);
-            Controls.Add(ch_box_hight);
+            Controls.Add(ch_box_intersec);
             Controls.Add(ch_box_ctrl);
             Controls.Add(pict_box);
             MinimumSize = new Size(900, 550);
             Name = "Form1";
             Text = "Form1";
+            Load += Form1_Load;
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             Resize += Form1_Resize;
@@ -132,7 +133,7 @@
 
         private PictureBox pict_box;
         private CheckBox ch_box_ctrl;
-        private CheckBox ch_box_hight;
+        private CheckBox ch_box_intersec;
         private NumericUpDown numericUpDown_size;
         private ListBox listBox_shape;
         private Button button_color;
