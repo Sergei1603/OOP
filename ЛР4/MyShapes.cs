@@ -19,7 +19,7 @@ using System.Security.Cryptography.X509Certificates;
 			e.Graphics.DrawEllipse(new Pen(System.Drawing.Color.Red, 3), x - this.size / 2, y - this.size / 2, this.size, this.size);
 		}
 		}
-		public bool Is_inside(int x, int y)
+		public override bool Is_inside(int x, int y)
 		{
 			if ((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y) <= this.size * this.size / 4)
 			{
@@ -70,11 +70,35 @@ public class Triangle : poligon_shape
 		return points;
     }
 
-    public override bool Is_Outside(int width, int height)
+    public override string outside(int width, int height)
     {
-        if ((x < size / 2) || (y < (int)(size * Math.Sqrt(3) / 3)) || (x > width - 3 - size / 2) || (y > height - 3 - (int)(size * Math.Sqrt(3) / 6)))
-            return true;
-        return false;
+        //if((x < size / 2) || (y < size / 2) || (x > width - 3 - size / 2) || (y > height - 3 - size / 2))
+        //    return true;
+        //return false;
+        if (x < size / 2)
+        {
+            return "left";
+            //           corect_position_left();
+        }
+        else if (y < (int)(size * Math.Sqrt(3) / 3))
+        {
+            return "top";
+            //    corect_position_top();
+        }
+        else if (x > width - 3 - size / 2)
+        {
+            return "right";
+            //    corect_position_right(width);
+        }
+        else if (y > height - 3 - (int)(size * Math.Sqrt(3) / 6))
+        {
+            return "bottom";
+            //    corect_position_bottom(height);
+        }
+        else
+        {
+            return "inside";
+        }
     }
 
 }
@@ -102,10 +126,35 @@ public class Hexagon : poligon_shape
 		return points;
     }
 
-    public override bool Is_Outside(int width, int height)
+    public override string outside(int width, int height)
     {
-        if ((x < (int)(Math.Sqrt(3) * size) / 2) || (y < size) || (x > width - 3 - (int)(Math.Sqrt(3) * size) / 2) || (y > height - 3 - size))
-            return true;
-        return false;
+        //if((x < size / 2) || (y < size / 2) || (x > width - 3 - size / 2) || (y > height - 3 - size / 2))
+        //    return true;
+        //return false;
+        if (x < (int)(Math.Sqrt(3) * size) / 2)
+        {
+            return "left";
+            //           corect_position_left();
+        }
+        else if (y < size)
+        {
+            return "top";
+            //    corect_position_top();
+        }
+        else if (x > width - 3 - (int)(Math.Sqrt(3) * size) / 2)
+        {
+            return "right";
+            //    corect_position_right(width);
+        }
+        else if (y > height - 3 - size)
+        {
+            return "bottom";
+            //    corect_position_bottom(height);
+        }
+        else
+        {
+            return "inside";
+        }
     }
+
 }

@@ -10,8 +10,9 @@ namespace ЛР4
 {
     public partial class Form1 : Form
     {
-        public MyList<shape> list = new MyList<shape>();
+        public MyList<shape> list;
         //       storage storage = new storage(list);
+        Stack<command> history;
         string filename = "store.txt";
 
         public Form1()
@@ -19,6 +20,8 @@ namespace ЛР4
 
             InitializeComponent();
             this.KeyPreview = true;
+            list = new MyList<shape>();
+            history = new Stack<command>();
         }
 
 
@@ -55,7 +58,7 @@ namespace ЛР4
         {
             for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
             {
-                i.getCurrentItem().corect_position(pict_box.Width, pict_box.Height);
+                //                i.getCurrentItem().corect_position(pict_box.Width, pict_box.Height);
                 i.getCurrentItem().paint_shape(e);
             }
         }
@@ -82,10 +85,20 @@ namespace ЛР4
                 {
                     if (i.getCurrentItem()._check)
                     {
-                        i.getCurrentItem().move(e.KeyData);
-                        //                       i.getCurrentItem().corect_position(pict_box.Size.Width, pict_box.Size.Height);
+                        command command = new MoveCommand(e.KeyData);
+                        command.execute(i.getCurrentItem());
+                        if (i.getCurrentItem().outside(pict_box.Width, pict_box.Height) != "inside")
+                        {
+                            command.unexecute();
+                        }
+                        history.Push(command);
+  //                      i.getCurrentItem().corect_position(i.getCurrentItem().outside(pict_box.Width, pict_box.Height), pict_box.Width, pict_box.Height);
                     }
                 }
+            }
+            if (e.KeyData == Keys.Z && history.Count != 0)
+            {
+                history.Pop().unexecute();
             }
             pict_box.Refresh();
             if (e.KeyCode == Keys.ControlKey)
@@ -109,7 +122,11 @@ namespace ЛР4
             {
                 if (i.getCurrentItem()._check)
                 {
-                    i.getCurrentItem().resize((int)numericUpDown_size.Value);
+                    command command = new ChangeSizeCommand((int)numericUpDown_size.Value, pict_box.Width, pict_box.Height);
+                    command.execute(i.getCurrentItem());
+    //                i.getCurrentItem().corect_position(i.getCurrentItem().outside(pict_box.Width, pict_box.Height), pict_box.Width, pict_box.Height);
+                    history.Push(command);
+                    //                   i.getCurrentItem().resize((int)numericUpDown_size.Value);
                     //                   i.getCurrentItem().corect_position(pict_box.Size.Width, pict_box.Height);
                 }
             }
@@ -129,7 +146,10 @@ namespace ЛР4
                 {
                     if (i.getCurrentItem()._check)
                     {
-                        i.getCurrentItem().change_color(MyDialog.Color);
+                        command command = new ChangeColorCommand(MyDialog.Color);
+                        command.execute(i.getCurrentItem());
+                        history.Push(command);
+                        //                     i.getCurrentItem().change_color(MyDialog.Color);
                     }
                 }
                 pict_box.Refresh();
@@ -154,6 +174,20 @@ namespace ЛР4
             storage storage = new storage(list);
             Factory factory = new shapeFactory();
             storage.load(filename, factory);
+        }
+
+        private void make_group_Click(object sender, EventArgs e)
+        {
+            Group group = new Group();
+            for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+            {
+                if (i.getCurrentItem()._check)
+                {
+                    group.add(i.getCurrentItem());
+                    i.remove();
+                }
+            }
+            list.PushBack(group);
         }
     }
 }

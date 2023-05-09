@@ -28,13 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             pict_box = new PictureBox();
+            Group = new ContextMenuStrip(components);
+            make_group = new ToolStripMenuItem();
+            delete_group = new ToolStripMenuItem();
             ch_box_ctrl = new CheckBox();
             ch_box_intersec = new CheckBox();
             numericUpDown_size = new NumericUpDown();
             listBox_shape = new ListBox();
             button_color = new Button();
             ((System.ComponentModel.ISupportInitialize)pict_box).BeginInit();
+            Group.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown_size).BeginInit();
             SuspendLayout();
             // 
@@ -42,6 +47,7 @@
             // 
             pict_box.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pict_box.BorderStyle = BorderStyle.FixedSingle;
+            pict_box.ContextMenuStrip = Group;
             pict_box.Location = new Point(34, 30);
             pict_box.Name = "pict_box";
             pict_box.Size = new Size(554, 425);
@@ -49,6 +55,26 @@
             pict_box.TabStop = false;
             pict_box.Paint += pict_box_Paint;
             pict_box.MouseClick += pict_box_MouseClick;
+            // 
+            // Group
+            // 
+            Group.ImageScalingSize = new Size(20, 20);
+            Group.Items.AddRange(new ToolStripItem[] { make_group, delete_group });
+            Group.Name = "Group";
+            Group.Size = new Size(211, 80);
+            // 
+            // make_group
+            // 
+            make_group.Name = "make_group";
+            make_group.Size = new Size(210, 24);
+            make_group.Text = "Сгруппировать";
+            make_group.Click += make_group_Click;
+            // 
+            // delete_group
+            // 
+            delete_group.Name = "delete_group";
+            delete_group.Size = new Size(210, 24);
+            delete_group.Text = "Разгруппировать";
             // 
             // ch_box_ctrl
             // 
@@ -124,6 +150,7 @@
             KeyUp += Form1_KeyUp;
             Resize += Form1_Resize;
             ((System.ComponentModel.ISupportInitialize)pict_box).EndInit();
+            Group.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericUpDown_size).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -137,5 +164,8 @@
         private NumericUpDown numericUpDown_size;
         private ListBox listBox_shape;
         private Button button_color;
+        private ContextMenuStrip Group;
+        private ToolStripMenuItem make_group;
+        private ToolStripMenuItem delete_group;
     }
 }
