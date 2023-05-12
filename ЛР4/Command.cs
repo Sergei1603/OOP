@@ -1,4 +1,7 @@
-﻿public abstract class command
+﻿using System.Collections.Generic;
+using System.Drawing;
+using static List;
+public abstract class command
 {
     public abstract void execute(shape selection);
     public abstract void unexecute();
@@ -85,14 +88,11 @@ public class ChangeSizeCommand : command
     shape selection;
     int size;
     int pre_size;
-    int width;
-    int hight;
-    public ChangeSizeCommand(int size, int width, int hight)
+
+    public ChangeSizeCommand(int size)
     {
         this.size = size;
         selection = null;
-        this.width = width;
-        this.hight = hight;
     }
     public override void execute(shape selection)
     {
@@ -100,18 +100,61 @@ public class ChangeSizeCommand : command
         this.selection = selection;
         if (selection != null)
         {
-            selection.resize(size, width, hight);
+            selection.resize(size);
         }
     }
     public override void unexecute()
     {
         if (selection != null)
         {
-            selection.resize(pre_size, width, hight);
+            selection.resize(pre_size);
         }
     }
     public override command clone()
     {
-        return new ChangeSizeCommand(size, width, hight);
+        return new ChangeSizeCommand(size);
+    }
+}
+
+public class MakeGroupCommand : command
+{
+    MyList <shape> shapes;
+    Group selection;
+    public MakeGroupCommand(MyList <shape> shapes)
+    {
+        this.shapes = shapes;
+    }
+    public override void execute(shape selection)
+    {
+        this.selection = (Group)selection;
+        if (selection != null)
+        {
+            for (Iterator<shape> i = shapes.CreateIterator(); !i.isEOL(); i.next())
+            {
+                if (i.getCurrentItem()._check)
+                {
+                    this.selection.add(i.getCurrentItem());
+                    i.remove();
+                }
+            }
+            shapes.PushBack(selection);
+        }
+    }
+    public override void unexecute()
+    {
+        for (Iterator<shape> i = shapes.CreateIterator(); !i.isEOL(); i.next())
+        {
+            if (i.getCurrentItem()._check && i.getCurrentItem() is Group)
+            {
+                Group g = (Group)i.getCurrentItem();
+                for (Iterator<shape> j = g.delete_group().CreateIterator(); !j.isEOL(); j.next())
+                    shapes.PushFront(j.getCurrentItem());
+                i.remove();
+            }
+        }
+    }
+    public override command clone()
+    {
+        return new MakeGroupCommand(shapes);
     }
 }

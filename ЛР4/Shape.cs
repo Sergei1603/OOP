@@ -15,16 +15,16 @@ public abstract class shape
     public abstract int get_size();
     public abstract void change_color(Color color);
 
-    public abstract void resize(int dx, int width, int hight);
+    public abstract void resize(int dx);
 
     public abstract void move(Keys k);
 
-    public abstract string outside(int width, int height);
+    public abstract (string, int) outside(int width, int height);
  //   public abstract void corect_position();
 
     public abstract void paint_shape(PaintEventArgs e);
     public abstract bool Is_inside(int x, int y);
-    public abstract void corect_position(int dx, string s, int width, int height);
+    public abstract void corect_position(int width, int height, int dx = 0, string direct = "");
 }
 
 public abstract class figure: shape
@@ -46,11 +46,11 @@ public abstract class figure: shape
     {
         _color = color;
     }
-    public override void resize(int new_size, int width, int hight)
+    public override void resize(int new_size)
     {
-        int dx = new_size / size;
+ //       int dx = new_size / size;
         size = new_size;
-        corect_position(dx, outside(width, hight), width, hight);
+ //       corect_position(width, hight);
     }
     public override void move(Keys k)
     {
@@ -70,55 +70,62 @@ public abstract class figure: shape
         }
     }
 
-    public override string outside(int width, int height)
+    public override (string, int) outside(int width, int height)
     {
         //if((x < size / 2) || (y < size / 2) || (x > width - 3 - size / 2) || (y > height - 3 - size / 2))
         //    return true;
         //return false;
         if(x < size / 2)
         {
-            return "left";
+            return ("left", -(x - size/2));
  //           corect_position_left();
         }
         else if(y < size / 2)
         {
-            return "top";
+            return ("top", -(y - size / 2));
         //    corect_position_top();
         }
         else if (x > width - 3 - size / 2)
         {
-            return "right";
+            return ("right", width - x - 3  - size / 2);
         //    corect_position_right(width);
         }
-        else if (y > height - 3 - size / 2)
+        else if (y > height - 3  - size / 2)
         {
-            return "bottom";
+            return ("bottom", height - 3 - y  - size / 2);
         //    corect_position_bottom(height);
         }
         else
         {
-            return "inside";
+            return ("inside", 0);
         }
     }
 
-    public override void corect_position(int dx, string s, int width, int height)
+    public override void corect_position(int width, int height, int dx = 0, string direct = "")
     {
-        if (s == "left")
+        if (direct == "")
+        {
+            (direct, dx) = outside(width, height);
+        }
+        if (direct == "left" || direct == "right")
         {
             x += dx;
+            corect_position(width, height);
         }
-        if (s == "top")
+        if (direct == "top" || direct == "bottom")
         {
             y += dx;
+            corect_position(width, height);
         }
-        if (s == "right")
-        {
-            x -= dx;
-        }
-        if (s == "bottom")
-        {
-            y -= dx;
-        }
+        //if (direct == "right")
+        //{
+        //    x -= dx;
+        //}
+        //if (direct == "bottom")
+        //{
+        //    y -= dx;
+        //}
+ //       corect_position(width, height);
     }
 }
 

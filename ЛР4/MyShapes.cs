@@ -70,34 +70,34 @@ public class Triangle : poligon_shape
 		return points;
     }
 
-    public override string outside(int width, int height)
+    public override (string, int) outside(int width, int height)
     {
         //if((x < size / 2) || (y < size / 2) || (x > width - 3 - size / 2) || (y > height - 3 - size / 2))
         //    return true;
         //return false;
         if (x < size / 2)
         {
-            return "left";
+            return ("left", -(x - size / 2));
             //           corect_position_left();
         }
         else if (y < (int)(size * Math.Sqrt(3) / 3))
         {
-            return "top";
+            return ("top", -(y - (int)(size * Math.Sqrt(3) / 3)));
             //    corect_position_top();
         }
         else if (x > width - 3 - size / 2)
         {
-            return "right";
+            return ("right", width - x - 3 - size / 2);
             //    corect_position_right(width);
         }
         else if (y > height - 3 - (int)(size * Math.Sqrt(3) / 6))
         {
-            return "bottom";
+            return ("bottom", height -y - 3 - (int)(size * Math.Sqrt(3) / 6));
             //    corect_position_bottom(height);
         }
         else
         {
-            return "inside";
+            return ("inside", 0);
         }
     }
 
@@ -126,34 +126,34 @@ public class Hexagon : poligon_shape
 		return points;
     }
 
-    public override string outside(int width, int height)
+    public override (string, int) outside(int width, int height)
     {
         //if((x < size / 2) || (y < size / 2) || (x > width - 3 - size / 2) || (y > height - 3 - size / 2))
         //    return true;
         //return false;
         if (x < (int)(Math.Sqrt(3) * size) / 2)
         {
-            return "left";
+            return ("left", -(x - (int)(Math.Sqrt(3) * size) / 2));
             //           corect_position_left();
         }
         else if (y < size)
         {
-            return "top";
+            return ("top", -(y - size));
             //    corect_position_top();
         }
         else if (x > width - 3 - (int)(Math.Sqrt(3) * size) / 2)
         {
-            return "right";
+            return ("right", width - x - 3 - (int)(Math.Sqrt(3) * size) / 2);
             //    corect_position_right(width);
         }
         else if (y > height - 3 - size)
         {
-            return "bottom";
+            return ("bottom", height - y - 3 - size);
             //    corect_position_bottom(height);
         }
         else
         {
-            return "inside";
+            return ("inside", 0);
         }
     }
 

@@ -4,28 +4,36 @@ using System.Windows.Forms;
 using static List;
 public class Group: shape
 {
-    MyList<shape> groups = new MyList<shape>();
+    public MyList<shape> groups = new MyList<shape>();
 
     public Group()
     {
         _check = true;
     }
-    public override string outside(int width, int height)
+    public MyList<shape> delete_group()
+    {
+        return groups;
+    }
+    public override (string, int) outside(int width, int height)
     {
         for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
         {
-            if (i.getCurrentItem().outside(width, height) != "inside")
+            if (i.getCurrentItem().outside(width, height).Item1 != "inside")
             {
                 return i.getCurrentItem().outside(width, height);
             }
         }
-        return "inside";
+        return ("inside", 0);
     }
-    public override void corect_position(int dx, string s, int width, int height)
+    public override void corect_position(int width, int height, int dx = 0, string direct = "")
     {
+        if (direct == "")
+        {
+            (direct, dx) = outside(width, height);
+        }
         for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
         {
-            i.getCurrentItem().corect_position(dx, s, width, height);
+            i.getCurrentItem().corect_position(width, height, dx, direct);
         }
     }
     public override void uncheck()
@@ -78,11 +86,11 @@ public class Group: shape
             i.getCurrentItem().change_color(color);
         }
     }
-    public override void resize(int dx, int width, int hight)
+    public override void resize(int dx)
     {
         for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
         {
-            i.getCurrentItem().resize(dx, width, hight);
+            i.getCurrentItem().resize(dx);
         }
     }
    

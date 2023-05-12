@@ -75,6 +75,7 @@
             delete_group.Name = "delete_group";
             delete_group.Size = new Size(210, 24);
             delete_group.Text = "Разгруппировать";
+            delete_group.Click += delete_group_Click;
             // 
             // ch_box_ctrl
             // 
