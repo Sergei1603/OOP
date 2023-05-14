@@ -11,7 +11,11 @@ using System.Security.Cryptography.X509Certificates;
 			this.size = size;
 			_color = color;
 		}
-		public override void paint_shape(PaintEventArgs e)
+    public override string get_name()
+    {
+        return "Круг";
+    }
+    public override void paint_shape(PaintEventArgs e)
 		{
 		e.Graphics.FillEllipse(new SolidBrush(_color), x - this.size / 2, y - this.size / 2, this.size, this.size);
 		if (_check)
@@ -40,7 +44,11 @@ public class Square : poligon_shape
 		_color = color;
 	}
 
-	public override Point[] calculate_vertex()
+    public override string get_name()
+    {
+        return "Квадрат";
+    }
+    public override Point[] calculate_vertex()
 	{
 		Point p0 = new Point(x - size / 2,  y - size / 2);
 		Point p1 = new Point(x - size / 2,  y + size / 2);
@@ -60,8 +68,11 @@ public class Triangle : poligon_shape
 		this.size = size;
 		_color = color;
 	}
-
-	public override Point[] calculate_vertex()
+    public override string get_name()
+    {
+        return "Треугольник";
+    }
+    public override Point[] calculate_vertex()
 	{
         Point point1 = new Point(x, (int)(y - size * Math.Sqrt(3) / 3));
         Point point2 = new Point(x - size / 2, (int)(y + (size * Math.Sqrt(3) / 6)));
@@ -113,8 +124,11 @@ public class Hexagon : poligon_shape
         this.size = size;
         _color = color;
     }
-
-	public override Point[] calculate_vertex()
+    public override string get_name()
+    {
+        return "Шестиугольник";
+    }
+    public override Point[] calculate_vertex()
 	{
         Point point1 = new Point(x, y - size);
         Point point2 = new Point(x + (int)(Math.Sqrt(3) * size) / 2, y - size / 2);

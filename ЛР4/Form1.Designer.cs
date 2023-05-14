@@ -61,19 +61,19 @@
             Group.ImageScalingSize = new Size(20, 20);
             Group.Items.AddRange(new ToolStripItem[] { make_group, delete_group });
             Group.Name = "Group";
-            Group.Size = new Size(211, 80);
+            Group.Size = new Size(199, 52);
             // 
             // make_group
             // 
             make_group.Name = "make_group";
-            make_group.Size = new Size(210, 24);
+            make_group.Size = new Size(198, 24);
             make_group.Text = "Сгруппировать";
             make_group.Click += make_group_Click;
             // 
             // delete_group
             // 
             delete_group.Name = "delete_group";
-            delete_group.Size = new Size(210, 24);
+            delete_group.Size = new Size(198, 24);
             delete_group.Text = "Разгруппировать";
             delete_group.Click += delete_group_Click;
             // 
@@ -146,6 +146,7 @@
             MinimumSize = new Size(900, 550);
             Name = "Form1";
             Text = "Form1";
+            FormClosed += Form1_FormClosed;
             Load += Form1_Load;
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;

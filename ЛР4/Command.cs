@@ -12,10 +12,14 @@ public class MoveCommand: command
 {
     shape selection;
     Keys key;
-    public MoveCommand(Keys key)
+    int width;
+    int hight;
+    public MoveCommand(Keys key, int width, int hight)
     {
         this.key = key;
         selection = null;
+        this.width = width;
+        this.hight = hight;
     }
     public override void execute(shape selection)
     {
@@ -23,6 +27,10 @@ public class MoveCommand: command
         if (selection != null)
         {
             selection.move(key);
+            if(selection.outside(width, hight).Item1 != "inside")
+            {
+                unexecute();
+            }
         }
     }
     public override void unexecute()
@@ -47,7 +55,7 @@ public class MoveCommand: command
     }
     public override command clone()
     {
-        return new MoveCommand(key);
+        return new MoveCommand(key, width, hight);
     }
 }
 
@@ -156,5 +164,77 @@ public class MakeGroupCommand : command
     public override command clone()
     {
         return new MakeGroupCommand(shapes);
+    }
+}
+
+public class DeleteCommand : command
+{
+    shape deleted;
+    MyList<shape> list;
+    public DeleteCommand(MyList<shape> list)
+    {
+        this.list = list;
+    }
+    public override void execute(shape selection)
+    {
+        deleted = selection;
+        for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+        {
+            if(i.getCurrentItem() == selection)
+            {
+                i.previos();
+                if (i.cur_item != null)
+                {
+                    i.getCurrentItem().check();
+                }
+                break;
+            }
+        }
+        list.remove(selection);
+    }
+    public override void unexecute()
+    {
+        list.PushBack(deleted);
+    }
+    public override command clone()
+    {
+        return new DeleteCommand(list);
+    }
+}
+
+public class MakeCommand : command
+{
+    MyList<shape> list;
+    shape shape;
+    public MakeCommand(MyList<shape> list)
+    {
+        this.list= list;
+    }
+    public override void execute(shape selection) { }
+    public virtual void execute(string code, int x, int y, int size, Color color, int width, int height)
+    {
+            Factory factory = new shapeFactory();
+            shape = factory.create_shape(code, x, y, size, color);
+            shape.corect_position(width, height);
+            //               shape.corect_position(pict_box.Width, pict_box.Height);
+            list.PushBack(shape);
+        
+    }
+    public override void unexecute()
+    {
+        for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+        {
+            if (i.getCurrentItem() == shape)
+            {
+                i.previos();
+                i.getCurrentItem().check();
+                break;
+            }
+        }
+        list.remove(shape);
+    }
+    public override command clone()
+    {
+        return new MakeCommand(list);
     }
 }

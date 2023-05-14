@@ -14,6 +14,30 @@ public class Group: shape
     {
         return groups;
     }
+    public override void save(string filename)
+    {
+        StreamWriter sr = new StreamWriter(filename, true);
+        sr.WriteLine("Группа");
+        sr.Close();
+        for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
+        {
+            i.getCurrentItem().save(filename);
+        }
+    }
+
+    public override void load(string line)
+    {
+        Factory factory = new shapeFactory();
+        line = line.Remove(line.LastIndexOf(";"));
+        string[] parametrs = line.Split();
+        for(int i = 1; i < parametrs.Length; i+=5)
+        {
+ //           shape shape = factory.create_shape(parametrs[i], int.Parse(parametrs[i + 1]), int.Parse(parametrs[i + 2]), int.Parse(parametrs[i + 3]), Color.FromArgb(int.Parse(parametrs[i + 4])));
+            shape shape = factory.create_shape(parametrs[i]);
+            shape.load(string.Join(" ", parametrs.Skip(i)));
+            add(shape);
+        }
+    }
     public override (string, int) outside(int width, int height)
     {
         for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())

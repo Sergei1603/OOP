@@ -25,6 +25,8 @@ public abstract class shape
     public abstract void paint_shape(PaintEventArgs e);
     public abstract bool Is_inside(int x, int y);
     public abstract void corect_position(int width, int height, int dx = 0, string direct = "");
+    public abstract void save(string filename);
+    public abstract void load(string parametrs);
 }
 
 public abstract class figure: shape
@@ -34,6 +36,22 @@ public abstract class figure: shape
     public int size;
     public Color _color = Color.Green;
 
+    public abstract string get_name();
+    public override void load(string line)
+    {
+        string[] parametrs = line.Split();
+        x = int.Parse(parametrs[1]);
+        y = int.Parse(parametrs[2]);
+        size = int.Parse(parametrs[3]);
+        _color = Color.FromArgb(int.Parse(parametrs[4]));
+    }
+    public override void save(string filename)
+    {
+        StreamWriter sr =  new StreamWriter(filename, true);
+        string name = get_name();
+        sr.WriteLine(name + " " + x + " " + y + " " + size + " " + _color.ToArgb());
+        sr.Close();
+    }
     public override Color get_color()
     {
         return _color;
