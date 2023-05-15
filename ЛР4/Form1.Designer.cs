@@ -30,16 +30,20 @@
         {
             components = new System.ComponentModel.Container();
             pict_box = new PictureBox();
-            Group = new ContextMenuStrip(components);
+            Menu = new ContextMenuStrip(components);
             make_group = new ToolStripMenuItem();
             delete_group = new ToolStripMenuItem();
+            Save_file = new ToolStripMenuItem();
+            Load_file = new ToolStripMenuItem();
             ch_box_ctrl = new CheckBox();
             ch_box_intersec = new CheckBox();
             numericUpDown_size = new NumericUpDown();
             listBox_shape = new ListBox();
             button_color = new Button();
+            saveFileDialog = new SaveFileDialog();
+            openFileDialog = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)pict_box).BeginInit();
-            Group.SuspendLayout();
+            Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown_size).BeginInit();
             SuspendLayout();
             // 
@@ -47,7 +51,7 @@
             // 
             pict_box.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pict_box.BorderStyle = BorderStyle.FixedSingle;
-            pict_box.ContextMenuStrip = Group;
+            pict_box.ContextMenuStrip = Menu;
             pict_box.Location = new Point(34, 30);
             pict_box.Name = "pict_box";
             pict_box.Size = new Size(554, 425);
@@ -56,12 +60,12 @@
             pict_box.Paint += pict_box_Paint;
             pict_box.MouseClick += pict_box_MouseClick;
             // 
-            // Group
+            // Menu
             // 
-            Group.ImageScalingSize = new Size(20, 20);
-            Group.Items.AddRange(new ToolStripItem[] { make_group, delete_group });
-            Group.Name = "Group";
-            Group.Size = new Size(199, 52);
+            Menu.ImageScalingSize = new Size(20, 20);
+            Menu.Items.AddRange(new ToolStripItem[] { make_group, delete_group, Save_file, Load_file });
+            Menu.Name = "Group";
+            Menu.Size = new Size(199, 100);
             // 
             // make_group
             // 
@@ -76,6 +80,20 @@
             delete_group.Size = new Size(198, 24);
             delete_group.Text = "Разгруппировать";
             delete_group.Click += delete_group_Click;
+            // 
+            // Save_file
+            // 
+            Save_file.Name = "Save_file";
+            Save_file.Size = new Size(198, 24);
+            Save_file.Text = "Сохранить";
+            Save_file.Click += Save_Click;
+            // 
+            // Load_file
+            // 
+            Load_file.Name = "Load_file";
+            Load_file.Size = new Size(198, 24);
+            Load_file.Text = "Загрузить";
+            Load_file.Click += Load_file_Click;
             // 
             // ch_box_ctrl
             // 
@@ -132,6 +150,10 @@
             button_color.UseVisualStyleBackColor = false;
             button_color.Click += textBox_color_Click;
             // 
+            // openFileDialog
+            // 
+            openFileDialog.FileName = "openFileDialog";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -146,13 +168,11 @@
             MinimumSize = new Size(900, 550);
             Name = "Form1";
             Text = "Form1";
-            FormClosed += Form1_FormClosed;
-            Load += Form1_Load;
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             Resize += Form1_Resize;
             ((System.ComponentModel.ISupportInitialize)pict_box).EndInit();
-            Group.ResumeLayout(false);
+            Menu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericUpDown_size).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -166,8 +186,12 @@
         private NumericUpDown numericUpDown_size;
         private ListBox listBox_shape;
         private Button button_color;
-        private ContextMenuStrip Group;
+        private ContextMenuStrip Menu;
         private ToolStripMenuItem make_group;
         private ToolStripMenuItem delete_group;
+        private ToolStripMenuItem Save_file;
+        private ToolStripMenuItem Load_file;
+        private SaveFileDialog saveFileDialog;
+        private OpenFileDialog openFileDialog;
     }
 }

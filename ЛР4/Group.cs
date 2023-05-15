@@ -14,29 +14,37 @@ public class Group: shape
     {
         return groups;
     }
-    public override void save(string filename)
+    public override void save(StreamWriter sr)
     {
-        StreamWriter sr = new StreamWriter(filename, true);
-        sr.WriteLine("Группа");
-        sr.Close();
+  //      StreamWriter sr = new StreamWriter(filename, true);
+        sr.WriteLine("Группа " + groups.get_size());
+  //      sr.Close();
         for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
         {
-            i.getCurrentItem().save(filename);
+            i.getCurrentItem().save(sr);
         }
     }
 
-    public override void load(string line)
+    public override void load(StreamReader file, Factory factory, int count)
     {
-        Factory factory = new shapeFactory();
-        line = line.Remove(line.LastIndexOf(";"));
-        string[] parametrs = line.Split();
-        for(int i = 1; i < parametrs.Length; i+=5)
+        for(int i = 0; i < count; i++)
         {
- //           shape shape = factory.create_shape(parametrs[i], int.Parse(parametrs[i + 1]), int.Parse(parametrs[i + 2]), int.Parse(parametrs[i + 3]), Color.FromArgb(int.Parse(parametrs[i + 4])));
-            shape shape = factory.create_shape(parametrs[i]);
-            shape.load(string.Join(" ", parametrs.Skip(i)));
+            string line = file.ReadLine();
+            string[] parametrs = line.Split();
+            shape shape = factory.create_shape(parametrs[0]);
+            shape.load(file, factory, int.Parse(parametrs[1]));
             add(shape);
         }
+ //       Factory factory = new shapeFactory();
+ //       line = line.Remove(line.LastIndexOf(";"));
+ //       string[] parametrs = line.Split();
+ //       for(int i = 1; i < parametrs.Length; i+=5)
+ //       {
+ ////           shape shape = factory.create_shape(parametrs[i], int.Parse(parametrs[i + 1]), int.Parse(parametrs[i + 2]), int.Parse(parametrs[i + 3]), Color.FromArgb(int.Parse(parametrs[i + 4])));
+ //           shape shape = factory.create_shape(parametrs[i]);
+ //           shape.load(string.Join(" ", parametrs.Skip(i)));
+ //           add(shape);
+ //       }
     }
     public override (string, int) outside(int width, int height)
     {

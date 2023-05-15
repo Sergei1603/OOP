@@ -8,26 +8,47 @@ public class storage
     {
         this.list = list;
     }
-    public void load(string filename, Factory factory)
+    public void save(StreamWriter sr)
     {
-        StreamReader sr = new StreamReader(filename);
-        string? line;
-        line = sr.ReadLine();
-        while (line != "" && line != null)
+//        StreamWriter sr = new StreamWriter(filename);
+        sr.WriteLine(list.get_size());
+ //       sr.Close();
+        for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
         {
-            string[] parameters = line.Split();
-            shape shape = factory.create_shape(parameters[0]);
-            shape.load(line);
-            list.PushBack(shape);
-            //      list.PushBack(factory.create_shape(parameters[0], Int32.Parse(parameters[1]), Int32.Parse(parameters[2]), Int32.Parse(parameters[3]), Color.FromName(parameters[4])));
+            i.getCurrentItem().save(sr);
+        }
+    }
+    public void load(StreamReader sr, Factory factory)
+    {
+
+ //       StreamReader sr = new StreamReader(filename);
+        //string? line;
+        string line = sr.ReadLine();
+        int count  = int.Parse(line);
+        for (int i = 0; i < count; i++)
+        {
             line = sr.ReadLine();
+            string[]? parametrs = line.Split();
+            shape shape = factory.create_shape(parametrs[0]);
+            shape.load(sr, factory, int.Parse(parametrs[1]));
+            list.PushBack(shape);
         }
         sr.Close();
+        //while (line != "" && line != null)
+        //{
+        //    string[] parameters = line.Split();
+        //    shape shape = factory.create_shape(parameters[0]);
+        //    shape.load(line);
+        //    list.PushBack(shape);
+        //    //      list.PushBack(factory.create_shape(parameters[0], Int32.Parse(parameters[1]), Int32.Parse(parameters[2]), Int32.Parse(parameters[3]), Color.FromName(parameters[4])));
+        //    line = sr.ReadLine();
+        //}
+        //sr.Close();
 
-        // StreamReader sr = new StreamReader(filename);
-        // string? line;
-        //line = sr.ReadToEnd();
-        //string[] parameters = line .Split(";\n");
+        //// StreamReader sr = new StreamReader(filename);
+        //// string? line;
+        ////line = sr.ReadToEnd();
+        ////string[] parameters = line .Split(";\n");
     }
 }
 

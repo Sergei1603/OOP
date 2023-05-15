@@ -210,15 +210,10 @@ public class MakeCommand : command
     {
         this.list= list;
     }
-    public override void execute(shape selection) { }
-    public virtual void execute(string code, int x, int y, int size, Color color, int width, int height)
+    public override void execute(shape selection)
     {
-            Factory factory = new shapeFactory();
-            shape = factory.create_shape(code, x, y, size, color);
-            shape.corect_position(width, height);
-            //               shape.corect_position(pict_box.Width, pict_box.Height);
-            list.PushBack(shape);
-        
+        shape = selection;
+        list.PushBack(selection);
     }
     public override void unexecute()
     {
@@ -227,7 +222,8 @@ public class MakeCommand : command
             if (i.getCurrentItem() == shape)
             {
                 i.previos();
-                i.getCurrentItem().check();
+                if(i.cur_item != null)
+                    i.getCurrentItem().check();
                 break;
             }
         }
