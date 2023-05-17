@@ -10,15 +10,24 @@ public class Group: shape
     {
         _check = true;
     }
+    public override void change_position(int x, int y)
+    {
+        for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
+        {
+            i.getCurrentItem().change_position(x, y);
+        }
+    }
     public MyList<shape> delete_group()
     {
         return groups;
     }
+    public override void apply(Handler handler)
+    {
+        handler.HandleGroup(this);
+    }
     public override void save(StreamWriter sr)
     {
-  //      StreamWriter sr = new StreamWriter(filename, true);
         sr.WriteLine("Группа " + groups.get_size());
-  //      sr.Close();
         for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
         {
             i.getCurrentItem().save(sr);
@@ -35,16 +44,6 @@ public class Group: shape
             shape.load(file, factory, int.Parse(parametrs[1]));
             add(shape);
         }
- //       Factory factory = new shapeFactory();
- //       line = line.Remove(line.LastIndexOf(";"));
- //       string[] parametrs = line.Split();
- //       for(int i = 1; i < parametrs.Length; i+=5)
- //       {
- ////           shape shape = factory.create_shape(parametrs[i], int.Parse(parametrs[i + 1]), int.Parse(parametrs[i + 2]), int.Parse(parametrs[i + 3]), Color.FromArgb(int.Parse(parametrs[i + 4])));
- //           shape shape = factory.create_shape(parametrs[i]);
- //           shape.load(string.Join(" ", parametrs.Skip(i)));
- //           add(shape);
- //       }
     }
     public override (string, int) outside(int width, int height)
     {
@@ -97,34 +96,7 @@ public class Group: shape
     {
         groups.PushBack(shape);
     }
-    public override void move(Keys key)
-    {
-        for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
-        {
-            i.getCurrentItem().move(key);
-        }
-    }
-    public override void paint_shape(PaintEventArgs e)
-    {
-        for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
-        {
-            i.getCurrentItem().paint_shape(e);
-        }
-    }
-    public override void change_color(Color color)
-    {
-        for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
-        {
-            i.getCurrentItem().change_color(color);
-        }
-    }
-    public override void resize(int dx)
-    {
-        for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
-        {
-            i.getCurrentItem().resize(dx);
-        }
-    }
+
    
     public override bool Is_inside(int x, int y)
     {

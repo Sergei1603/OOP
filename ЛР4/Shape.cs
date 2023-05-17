@@ -13,20 +13,14 @@ public abstract class shape
     }
     public abstract Color get_color();
     public abstract int get_size();
-    public abstract void change_color(Color color);
-
-    public abstract void resize(int dx);
-
-    public abstract void move(Keys k);
 
     public abstract (string, int) outside(int width, int height);
- //   public abstract void corect_position();
-
-    public abstract void paint_shape(PaintEventArgs e);
     public abstract bool Is_inside(int x, int y);
     public abstract void corect_position(int width, int height, int dx = 0, string direct = "");
     public abstract void save(StreamWriter sr);
     public abstract void load(StreamReader file, Factory factory, int c);
+    public abstract void apply(Handler handler);
+    public abstract void change_position(int x, int y);
 }
 
 public abstract class figure: shape
@@ -37,6 +31,15 @@ public abstract class figure: shape
     public Color _color = Color.Green;
 
     public abstract string get_name();
+    public override void change_position(int x, int y)
+    {
+        this.x += x;
+        this.y += y;
+    }
+    public override void apply(Handler handler)
+    {
+        handler.HandleFigure(this);
+    }
     public override void load(StreamReader file, Factory factory, int count = 1)
     {
         string line = file.ReadLine();
@@ -50,11 +53,9 @@ public abstract class figure: shape
     }
     public override void save(StreamWriter sr)
     {
-  //      StreamWriter sr =  new StreamWriter(filename, true);
         string name = get_name();
         sr.WriteLine(name + " " + 1);
         sr.WriteLine(x + " " + y + " " + size + " " + _color.ToArgb() + " " + _check);
-//        sr.Close();
     }
     public override Color get_color()
     {
@@ -64,58 +65,24 @@ public abstract class figure: shape
     {
         return size;
     }
-    public override void change_color(Color color)
-    {
-        _color = color;
-    }
-    public override void resize(int new_size)
-    {
- //       int dx = new_size / size;
-        size = new_size;
- //       corect_position(width, hight);
-    }
-    public override void move(Keys k)
-    {
-        switch (k)
-        {
-            case Keys.A:
-                x -= 5;
-                break;
-            case Keys.D:
-                x += 5;
-                break;
-            case Keys.W:
-                y -= 5; break;
-            case Keys.S:
-                y += 5;
-                break;
-        }
-    }
 
     public override (string, int) outside(int width, int height)
     {
-        //if((x < size / 2) || (y < size / 2) || (x > width - 3 - size / 2) || (y > height - 3 - size / 2))
-        //    return true;
-        //return false;
         if(x < size / 2)
         {
             return ("left", -(x - size/2));
- //           corect_position_left();
         }
         else if(y < size / 2)
         {
             return ("top", -(y - size / 2));
-        //    corect_position_top();
         }
         else if (x > width - 3 - size / 2)
         {
             return ("right", width - x - 3  - size / 2);
-        //    corect_position_right(width);
         }
         else if (y > height - 3  - size / 2)
         {
             return ("bottom", height - 3 - y  - size / 2);
-        //    corect_position_bottom(height);
         }
         else
         {
@@ -139,29 +106,25 @@ public abstract class figure: shape
             y += dx;
             corect_position(width, height);
         }
-        //if (direct == "right")
-        //{
-        //    x -= dx;
-        //}
-        //if (direct == "bottom")
-        //{
-        //    y -= dx;
-        //}
- //       corect_position(width, height);
     }
 }
 
 public abstract class poligon_shape: figure
 {
     public abstract Point[] calculate_vertex();
-    public override void paint_shape(PaintEventArgs e)
+    public override void apply(Handler handler)
     {
-        e.Graphics.FillPolygon(new SolidBrush(_color), calculate_vertex());
-        if (_check)
+        Drawer? dr = handler as Drawer;
+        if (dr != null)
         {
-            e.Graphics.DrawPolygon(new Pen(System.Drawing.Color.Red, 3), calculate_vertex());
+            dr.HandlePoligon(this);
+        }
+        else
+        {
+            handler.HandleFigure(this);
         }
     }
+
     public override bool Is_inside(int x, int y)
     {
         bool result = false;

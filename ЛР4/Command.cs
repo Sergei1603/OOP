@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Xml.Linq;
 using static List;
 public abstract class command
 {
@@ -11,22 +12,29 @@ public abstract class command
 public class MoveCommand: command
 {
     shape selection;
-    Keys key;
     int width;
     int hight;
-    public MoveCommand(Keys key, int width, int hight)
+    Mover[] movers;
+
+    public void update_edgs(int width, int hight)
     {
-        this.key = key;
+        this.width = width;
+        this.hight = hight;
+    }
+    public MoveCommand(Mover[] movers, int width, int hight)
+    {
         selection = null;
         this.width = width;
         this.hight = hight;
+        this.movers = movers;
+       
     }
     public override void execute(shape selection)
     {
         this.selection = selection;
         if (selection != null)
         {
-            selection.move(key);
+            selection.apply(movers[0]);
             if(selection.outside(width, hight).Item1 != "inside")
             {
                 unexecute();
@@ -37,36 +45,23 @@ public class MoveCommand: command
     {
         if (selection != null)
         {
-            switch (key)
-            {
-                case Keys.A:
-                    selection.move(Keys.D);
-                    break;
-                case Keys.D:
-                    selection.move(Keys.A);
-                    break;
-                case Keys.W:
-                    selection.move(Keys.S); break;
-                case Keys.S:
-                    selection.move(Keys.W);
-                    break;
-            }
+            selection.apply(movers[1]);
         }
     }
     public override command clone()
     {
-        return new MoveCommand(key, width, hight);
+        return new MoveCommand(movers, width, hight);
     }
 }
 
 public class ChangeColorCommand : command
 {
     shape selection;
-    Color color;
+    Changer_color changer;
     Color pre_color;
-    public ChangeColorCommand(Color color)
+    public ChangeColorCommand(Changer_color changer)
     {
-        this.color = color;
+        this.changer = changer;
         selection = null;
     }
     public override void execute(shape selection)
@@ -75,31 +70,32 @@ public class ChangeColorCommand : command
         this.selection = selection;
         if (selection != null)
         {
-            selection.change_color(color);
+            selection.apply(changer);
         }
     }
     public override void unexecute()
     {
         if (selection != null)
-        {
-            selection.change_color(pre_color);
+        { 
+            Changer_color pre_change = new Changer_color(pre_color);
+            selection.apply(pre_change);
         }
     }
     public override command clone()
     {
-        return new ChangeColorCommand(color);
+        return new ChangeColorCommand(changer);
     }
 }
 
 public class ChangeSizeCommand : command
 {
     shape selection;
-    int size;
     int pre_size;
+    Resizer resizer;
 
-    public ChangeSizeCommand(int size)
+    public ChangeSizeCommand(Resizer resizer)
     {
-        this.size = size;
+        this.resizer = resizer;
         selection = null;
     }
     public override void execute(shape selection)
@@ -108,19 +104,20 @@ public class ChangeSizeCommand : command
         this.selection = selection;
         if (selection != null)
         {
-            selection.resize(size);
+            selection.apply(resizer);
         }
     }
     public override void unexecute()
     {
         if (selection != null)
         {
-            selection.resize(pre_size);
+            Resizer pre_resizer = new Resizer(pre_size);
+            selection.apply(resizer);
         }
     }
     public override command clone()
     {
-        return new ChangeSizeCommand(size);
+        return new ChangeSizeCommand(resizer);
     }
 }
 
@@ -150,20 +147,67 @@ public class MakeGroupCommand : command
     }
     public override void unexecute()
     {
-        for (Iterator<shape> i = shapes.CreateIterator(); !i.isEOL(); i.next())
+        if (selection != null)
         {
-            if (i.getCurrentItem()._check && i.getCurrentItem() is Group)
+            for (Iterator<shape> i = shapes.CreateIterator(); !i.isEOL(); i.next())
             {
-                Group g = (Group)i.getCurrentItem();
-                for (Iterator<shape> j = g.delete_group().CreateIterator(); !j.isEOL(); j.next())
-                    shapes.PushFront(j.getCurrentItem());
-                i.remove();
+                if (i.getCurrentItem()._check && i.getCurrentItem() is Group)
+                {
+                    Group g = (Group)i.getCurrentItem();
+                    for (Iterator<shape> j = g.delete_group().CreateIterator(); !j.isEOL(); j.next())
+                        shapes.PushFront(j.getCurrentItem());
+                    i.remove();
+                }
             }
         }
     }
     public override command clone()
     {
         return new MakeGroupCommand(shapes);
+    }
+}
+
+public class DeleteGroupCommand : command
+{
+    public MyList<shape> shapes;
+    Group selection;
+    public DeleteGroupCommand(MyList<shape> shapes)
+    {
+        this.shapes = shapes;
+    }
+    public override void execute(shape selection)
+    {
+        this.selection =(Group)selection;
+        if (selection != null)
+        {
+            for (Iterator<shape> i = shapes.CreateIterator(); !i.isEOL(); i.next())
+            {
+                if (i.getCurrentItem()._check && i.getCurrentItem() is Group)
+                {
+                    Group g = (Group)i.getCurrentItem();
+                    for (Iterator<shape> j = g.delete_group().CreateIterator(); !j.isEOL(); j.next())
+                        shapes.PushFront(j.getCurrentItem());
+                    i.remove();
+                }
+            }
+        }
+    }
+    public override void unexecute()
+    {
+        if (selection != null)
+        {
+            for (Iterator<shape> i = selection.groups.CreateIterator(); !i.isEOL(); i.next())
+            {
+                shapes.remove(i.getCurrentItem());
+            }
+             selection.check();
+            shapes.PushBack(selection);
+            
+        }
+    }
+    public override command clone()
+    {
+        return new DeleteGroupCommand(shapes);
     }
 }
 
@@ -232,5 +276,45 @@ public class MakeCommand : command
     public override command clone()
     {
         return new MakeCommand(list);
+    }
+}
+
+public class ChangePositionCommand : command
+{
+    int sum_dx = 0;
+    int sum_dy = 0;
+    int dx;
+    int dy;
+    shape selection;
+    int width;
+    int height;
+    public ChangePositionCommand(int dx, int dy, int width, int height)
+    {
+        this.dx= dx;
+        this.dy= dy;
+        this.width= width;
+        this.height= height;
+    }
+    public override void execute(shape selection)
+    {
+        this.selection = selection;
+        if (selection != null)
+        {
+            selection.change_position(dx, dy);
+            selection.corect_position(width, height);
+            sum_dx += dx;
+            sum_dy += dy;
+        }
+    }
+    public override void unexecute()
+    {
+        if (selection != null)
+        {
+            selection.change_position(-sum_dx, -sum_dy);
+        }
+    }
+    public override command clone()
+    {
+        return new ChangePositionCommand(dx, dy, width, height);
     }
 }

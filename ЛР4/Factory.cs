@@ -10,9 +10,7 @@ public class storage
     }
     public void save(StreamWriter sr)
     {
-//        StreamWriter sr = new StreamWriter(filename);
         sr.WriteLine(list.get_size());
- //       sr.Close();
         for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
         {
             i.getCurrentItem().save(sr);
@@ -20,9 +18,6 @@ public class storage
     }
     public void load(StreamReader sr, Factory factory)
     {
-
- //       StreamReader sr = new StreamReader(filename);
-        //string? line;
         string line = sr.ReadLine();
         int count  = int.Parse(line);
         for (int i = 0; i < count; i++)
@@ -34,21 +29,6 @@ public class storage
             list.PushBack(shape);
         }
         sr.Close();
-        //while (line != "" && line != null)
-        //{
-        //    string[] parameters = line.Split();
-        //    shape shape = factory.create_shape(parameters[0]);
-        //    shape.load(line);
-        //    list.PushBack(shape);
-        //    //      list.PushBack(factory.create_shape(parameters[0], Int32.Parse(parameters[1]), Int32.Parse(parameters[2]), Int32.Parse(parameters[3]), Color.FromName(parameters[4])));
-        //    line = sr.ReadLine();
-        //}
-        //sr.Close();
-
-        //// StreamReader sr = new StreamReader(filename);
-        //// string? line;
-        ////line = sr.ReadToEnd();
-        ////string[] parameters = line .Split(";\n");
     }
 }
 

@@ -15,6 +15,13 @@ namespace ЛР4
         string filename = "store.txt";
         Dictionary<Keys, command> map = new Dictionary<Keys, command>();
         storage storage;
+        Changer_color changer_color;
+        Resizer resizer;
+        bool mouse_move;
+        bool f = false;
+        int x;
+        int y;
+        MyList<command> change_position_list;
 
         public Form1()
         {
@@ -23,55 +30,76 @@ namespace ЛР4
             this.KeyPreview = true;
             list = new MyList<shape>();
             history = new Stack<MyList<command>>();
+            Mover[] A = { new Mover(Keys.A), new Mover(Keys.D) };
+            Mover[] D = { new Mover(Keys.D), new Mover(Keys.A) };
+            Mover[] W = { new Mover(Keys.W), new Mover(Keys.S) };
+            Mover[] S = { new Mover(Keys.S), new Mover(Keys.W) };
             map[Keys.Delete] = new DeleteCommand(list);
-            map[Keys.A] = new MoveCommand(Keys.A, pict_box.Width, pict_box.Height);
-            map[Keys.D] = new MoveCommand(Keys.D, pict_box.Width, pict_box.Height);
-            map[Keys.W] = new MoveCommand(Keys.W, pict_box.Width, pict_box.Height);
-            map[Keys.S] = new MoveCommand(Keys.S, pict_box.Width, pict_box.Height);
+            map[Keys.A] = new MoveCommand(A, pict_box.Width, pict_box.Height);
+            map[Keys.D] = new MoveCommand(D, pict_box.Width, pict_box.Height);
+            map[Keys.W] = new MoveCommand(W, pict_box.Width, pict_box.Height);
+            map[Keys.S] = new MoveCommand(S, pict_box.Width, pict_box.Height);
             storage = new storage(list);
+            changer_color = new Changer_color(Color.Green);
+            resizer = new Resizer(20);
+
         }
 
 
         private void pict_box_MouseClick(object sender, MouseEventArgs e)
         {
-            bool inside = false;
-            if (Control.ModifierKeys != Keys.Control)
+       //     if (!checkBox_move.Checked)
             {
+                //if (e.Button == MouseButtons.Left)
+                //{
+                //    mouse_move = false;
+                //    history.Push(change_position_list);
+                //}
+                bool inside = false;
+                if (Control.ModifierKeys != Keys.Control && f)
+                {
+                    for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+                    {
+                        i.getCurrentItem().uncheck();
+                    }
+                }
+                //             mouse_move = true;
                 for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
                 {
-                    i.getCurrentItem().uncheck();
+                    if (i.getCurrentItem().Is_inside(e.X, e.Y))
+                    {
+                        inside = true;
+                        i.getCurrentItem().check();
+                        if (!ch_box_intersec.Checked)
+                            break;
+                    }
                 }
-            }
-
-            for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
-            {
-                if (i.getCurrentItem().Is_inside(e.X, e.Y))
+                if (!inside && listBox_shape.Text != "" && f)
                 {
-                    inside = true;
-                    i.getCurrentItem().check();
-                    if (!ch_box_intersec.Checked)
-                        break;
+                    Factory factory = new shapeFactory();
+                    shape shape = factory.create_shape(listBox_shape.Text, e.X, e.Y, (int)numericUpDown_size.Value, button_color.BackColor);
+                    shape.corect_position(pict_box.Width, pict_box.Height);
+                    MakeCommand command = new MakeCommand(list);
+                    command.execute(shape);
+                    MyList<command> list_command = new MyList<command>();
+                    list_command.PushBack(command);
+                    history.Push(list_command);
                 }
+                pict_box.Refresh();
             }
-            if (!inside && listBox_shape.Text != "")
-            {
-                Factory factory = new shapeFactory();
-                shape shape = factory.create_shape(listBox_shape.Text, e.X, e.Y, (int)numericUpDown_size.Value, button_color.BackColor);
-                shape.corect_position(pict_box.Width, pict_box.Height);
-                MakeCommand command = new MakeCommand(list);
-                command.execute(shape);
-                MyList<command> list_command = new MyList<command>();
-                list_command.PushBack(command);
-                history.Push(list_command);
-            }
-            pict_box.Refresh();
+            //if (e.Button == MouseButtons.Left)
+            //{
+            //    mouse_move = false;
+            //    history.Push(change_position_list);
+            //}
         }
 
         private void pict_box_Paint(object sender, PaintEventArgs e)
         {
+            Drawer drawer = new Drawer(e);
             for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
             {
-                i.getCurrentItem().paint_shape(e);
+                i.getCurrentItem().apply(drawer);
             }
         }
 
@@ -119,12 +147,13 @@ namespace ЛР4
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
+            resizer.size = (int)numericUpDown_size.Value;
             MyList<command> list_command = new MyList<command>();
             for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
             {
                 if (i.getCurrentItem()._check)
                 {
-                    command command = new ChangeSizeCommand((int)numericUpDown_size.Value);
+                    command command = new ChangeSizeCommand(resizer);
                     i.getCurrentItem().corect_position(pict_box.Width, pict_box.Height);
                     command.execute(i.getCurrentItem());
                     list_command.PushBack(command);
@@ -143,15 +172,15 @@ namespace ЛР4
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
                 button_color.BackColor = MyDialog.Color;
+                changer_color.color = MyDialog.Color;
                 MyList<command> list_command = new MyList<command>();
                 for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
                 {
                     if (i.getCurrentItem()._check)
                     {
-                        command command = new ChangeColorCommand(MyDialog.Color);
+                        command command = new ChangeColorCommand(changer_color);
                         command.execute(i.getCurrentItem());
                         list_command.PushBack(command);
-                        //                     i.getCurrentItem().change_color(MyDialog.Color);
                     }
                 }
                 history.Push(list_command);
@@ -169,10 +198,15 @@ namespace ЛР4
             {
                 numericUpDown_size.Maximum = pict_box.Size.Width / 2;
             }
-            map[Keys.A] = new MoveCommand(Keys.A, pict_box.Width, pict_box.Height);
-            map[Keys.D] = new MoveCommand(Keys.D, pict_box.Width, pict_box.Height);
-            map[Keys.W] = new MoveCommand(Keys.W, pict_box.Width, pict_box.Height);
-            map[Keys.S] = new MoveCommand(Keys.S, pict_box.Width, pict_box.Height);
+            foreach (var i in map)
+            {
+                MoveCommand? command = i.Value as MoveCommand;
+
+                if (command != null)
+                {
+                    command.update_edgs(pict_box.Width, pict_box.Height);
+                }
+            }
             pict_box.Refresh();
         }
 
@@ -190,17 +224,17 @@ namespace ЛР4
 
         private void delete_group_Click(object sender, EventArgs e)
         {
-
+            MyList<command> list_command = new MyList<command>();
             for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
             {
-                if (i.getCurrentItem()._check && i.getCurrentItem() is Group)
+                if (i.getCurrentItem()._check)
                 {
-                    Group g = (Group)i.getCurrentItem();
-                    for (Iterator<shape> j = g.delete_group().CreateIterator(); !j.isEOL(); j.next())
-                        list.PushFront(j.getCurrentItem());
-                    i.remove();
+                    command command = new DeleteGroupCommand(list);
+                    command.execute(i.getCurrentItem());
+                    list_command.PushBack(command);
                 }
             }
+            history.Push(list_command);
         }
 
 
@@ -208,17 +242,16 @@ namespace ЛР4
         {
             if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
-            // получаем выбранный файл
             string filename = saveFileDialog.FileName;
             StreamWriter writer = new StreamWriter(filename);
-            writer.WriteLine(Width + " " +  Height + " " + Location.X + " " + Location.Y);
-//            writer.Close();
+            writer.WriteLine(Width + " " + Height + " " + Location.X + " " + Location.Y);
             storage.save(writer);
             writer.Close();
         }
 
         private void Load_file_Click(object sender, EventArgs e)
         {
+            list.clear();
             if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             string filename = openFileDialog.FileName;
@@ -227,10 +260,69 @@ namespace ЛР4
             string[] parametrs = line.Split();
             Width = int.Parse(parametrs[0]);
             Height = int.Parse(parametrs[1]);
-            this.Location= new Point(int.Parse(parametrs[2]), int.Parse(parametrs[3]));
-//            Location.Y = int.Parse(parametrs[3]);
+            this.Location = new Point(int.Parse(parametrs[2]), int.Parse(parametrs[3]));
+            //            Location.Y = int.Parse(parametrs[3]);
             storage.load(reader, new shapeFactory());
             pict_box.Refresh();
+        }
+
+        private void pict_box_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouse_move = true;
+                f = true;
+                x = e.X;
+                y = e.Y;
+                change_position_list = new MyList<command>();
+            }
+        }
+
+        private void pict_box_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouse_move)
+            {
+                bool inside = false;
+                for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+                {
+                    if (i.getCurrentItem().Is_inside(e.X, e.Y))
+                    {
+                        inside = true;
+                    }
+                }
+                if (inside)
+                {
+                    for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+                    {
+                        if (i.getCurrentItem()._check)
+                        {
+
+                            command command = new ChangePositionCommand(e.X - x, e.Y - y, pict_box.Width, pict_box.Height);
+                            //                           move.update_d(e.X - x, e.Y - y);
+                            f = false;
+                            command.execute(i.getCurrentItem());
+                            change_position_list.PushBack(command);
+                            //                         i.getCurrentItem().chenge_position(e.X - x, e.Y - y);
+                        }
+                    }
+                    //                  history.Push(list_command);
+                }
+                x = e.X;
+                y = e.Y;
+            }
+            //x = e.X;
+            //y = e.Y;
+            pict_box.Refresh();
+        }
+
+        private void pict_box_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouse_move = false;
+                history.Push(change_position_list);
+                f = false;
+            }
         }
     }
 }
