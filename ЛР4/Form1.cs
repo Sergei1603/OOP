@@ -17,7 +17,7 @@ namespace ЛР4
         storage storage;
         Changer_color changer_color;
         Resizer resizer;
-        bool mouse_move;
+        bool mouse_move = true;
         bool f = false;
         int x;
         int y;
