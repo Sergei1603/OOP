@@ -42,7 +42,6 @@
             button_color = new Button();
             saveFileDialog = new SaveFileDialog();
             openFileDialog = new OpenFileDialog();
-            checkBox_move = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pict_box).BeginInit();
             Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown_size).BeginInit();
@@ -158,22 +157,11 @@
             // 
             openFileDialog.FileName = "openFileDialog";
             // 
-            // checkBox_move
-            // 
-            checkBox_move.AutoSize = true;
-            checkBox_move.Location = new Point(652, 393);
-            checkBox_move.Name = "checkBox_move";
-            checkBox_move.Size = new Size(195, 24);
-            checkBox_move.TabIndex = 7;
-            checkBox_move.Text = "Передвижение мышью";
-            checkBox_move.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(882, 503);
-            Controls.Add(checkBox_move);
             Controls.Add(button_color);
             Controls.Add(listBox_shape);
             Controls.Add(numericUpDown_size);
@@ -208,6 +196,5 @@
         private ToolStripMenuItem Load_file;
         private SaveFileDialog saveFileDialog;
         private OpenFileDialog openFileDialog;
-        private CheckBox checkBox_move;
     }
 }

@@ -28,14 +28,7 @@ using System.Security.Cryptography.X509Certificates;
     {
         return "Круг";
     }
-  //  public override void paint_shape(PaintEventArgs e)
-		//{
-		//e.Graphics.FillEllipse(new SolidBrush(_color), x - this.size / 2, y - this.size / 2, this.size, this.size);
-		//if (_check)
-		//{
-		//	e.Graphics.DrawEllipse(new Pen(System.Drawing.Color.Red, 3), x - this.size / 2, y - this.size / 2, this.size, this.size);
-		//}
-		//}
+
 		public override bool Is_inside(int x, int y)
 		{
 			if ((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y) <= this.size * this.size / 4)

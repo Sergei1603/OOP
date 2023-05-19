@@ -12,13 +12,12 @@ namespace ЛР4
     {
         public MyList<shape> list;
         Stack<MyList<command>> history;
-        string filename = "store.txt";
         Dictionary<Keys, command> map = new Dictionary<Keys, command>();
         storage storage;
         Changer_color changer_color;
         Resizer resizer;
         bool mouse_move = true;
-        bool f = false;
+        bool flag = false;
         int x;
         int y;
         MyList<command> change_position_list;
@@ -48,7 +47,7 @@ namespace ЛР4
 
         private void pict_box_MouseClick(object sender, MouseEventArgs e)
         {
-       //     if (!checkBox_move.Checked)
+            //     if (!checkBox_move.Checked)
             {
                 //if (e.Button == MouseButtons.Left)
                 //{
@@ -56,7 +55,7 @@ namespace ЛР4
                 //    history.Push(change_position_list);
                 //}
                 bool inside = false;
-                if (Control.ModifierKeys != Keys.Control && f)
+                if (Control.ModifierKeys != Keys.Control && flag)
                 {
                     for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
                     {
@@ -74,7 +73,7 @@ namespace ЛР4
                             break;
                     }
                 }
-                if (!inside && listBox_shape.Text != "" && f)
+                if (!inside && listBox_shape.Text != "" && flag)
                 {
                     Factory factory = new shapeFactory();
                     shape shape = factory.create_shape(listBox_shape.Text, e.X, e.Y, (int)numericUpDown_size.Value, button_color.BackColor);
@@ -240,6 +239,8 @@ namespace ЛР4
 
         private void Save_Click(object sender, EventArgs e)
         {
+            SaveFileDialog save = new SaveFileDialog();
+            saveFileDialog.Filter = "TXT files|*.txt";
             if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             string filename = saveFileDialog.FileName;
@@ -271,7 +272,7 @@ namespace ЛР4
             if (e.Button == MouseButtons.Left)
             {
                 mouse_move = true;
-                f = true;
+                flag = true;
                 x = e.X;
                 y = e.Y;
                 change_position_list = new MyList<command>();
@@ -298,20 +299,15 @@ namespace ЛР4
                         {
 
                             command command = new ChangePositionCommand(e.X - x, e.Y - y, pict_box.Width, pict_box.Height);
-                            //                           move.update_d(e.X - x, e.Y - y);
-                            f = false;
+                            flag = false;
                             command.execute(i.getCurrentItem());
                             change_position_list.PushBack(command);
-                            //                         i.getCurrentItem().chenge_position(e.X - x, e.Y - y);
                         }
                     }
-                    //                  history.Push(list_command);
                 }
                 x = e.X;
                 y = e.Y;
             }
-            //x = e.X;
-            //y = e.Y;
             pict_box.Refresh();
         }
 
@@ -320,8 +316,11 @@ namespace ЛР4
             if (e.Button == MouseButtons.Left)
             {
                 mouse_move = false;
-                history.Push(change_position_list);
-                f = false;
+                if(change_position_list.get_size()!= 0)
+                {
+                    history.Push(change_position_list);
+                }
+                flag = false;
             }
         }
     }
