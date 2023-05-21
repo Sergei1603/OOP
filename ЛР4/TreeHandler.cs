@@ -6,7 +6,6 @@ public class TreeHandler : IObserver, IObservable
 {
     internal TreeView treeView;
     List<IObserver> observers;
- //   List<MyShapeList> observers;
     public TreeHandler(TreeView tree)
     {
         observers = new List<IObserver>();
@@ -29,7 +28,6 @@ public class TreeHandler : IObserver, IObservable
     {
         treeView.Nodes.Clear();
         MyShapeList tmp = (MyShapeList)o;
-//        CIterator<Element> i = tmp.CreateIterator();
         for (Iterator<shape> i = tmp.CreateIterator(); !i.isEOL(); i.next())
         {
             TreeNode new_node = new TreeNode(i.getCurrentItem().get_name());
@@ -48,7 +46,6 @@ public class TreeHandler : IObserver, IObservable
             }
             treeView.Nodes.Add(new_node);
         }
-        // treeView.Refresh();
     }
     public void ProcessNode(TreeNode tr, shape elem)
     {
@@ -56,7 +53,6 @@ public class TreeHandler : IObserver, IObservable
         {
             Group g = (Group)elem;
             MyShapeList tmp = (MyShapeList)g.groups;
-   //         CIterator<Element> i = tmp.CreateIterator();
             for (Iterator<shape> i = tmp.CreateIterator(); !i.isEOL(); i.next())
             {
                 TreeNode new_node = new TreeNode(i.getCurrentItem().get_name());

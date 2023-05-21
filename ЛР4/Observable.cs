@@ -22,11 +22,6 @@ public class observable
             {
                 visited[i] = true;
                 observers[i].apply(mover);
-                //if (observers[i].outside(width, height).Item1 != "inside")
-                //{
-                //    observers[i].apply(mover[1]);
-                //}
-                // visited[i] = true;
             }
         }
     }
@@ -39,13 +34,6 @@ public class observable
             {
                visited[i] = true;
                 observers[i].change_position(dx, dy, width, height);
-    //            observers[i].corect_position(width, height);
-      //          observers[i].observable.NotifyObservers(dx, dy, width, height);
-                //if (observers[i].outside(width, height).Item1 != "inside")
-                //{
-                //    observers[i].apply(mover[1]);
-                //}
-     //            visited[i] = true;
             }
         }
     }

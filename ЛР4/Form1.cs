@@ -79,32 +79,19 @@ namespace ЛР4
         }
         private void pict_box_MouseClick(object sender, MouseEventArgs e)
         {
-            //     if (!checkBox_move.Checked)
-            {
-                //if (e.Button == MouseButtons.Left)
-                //{
-                //    mouse_move = false;
-                //    history.Push(change_position_list);
-                //}
-     //           if (!checkBox_line.Checked)
                 {
                     bool inside = false;
                     if (Control.ModifierKeys != Keys.Control && flag)
                     {
-                        //for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
-                        //{
-                        //    //                       i.getCurrentItem().uncheck();
-                        //    list.DeselectElement(i.getCurrentItem());
-                        //}
-                        list.DeselectAll();
+                           list.DeselectAll();
                     }
-                    //             mouse_move = true;
+
                     for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
                     {
                         if (i.getCurrentItem().Is_inside(e.X, e.Y))
                         {
                             inside = true;
-                            //                       i.getCurrentItem().check();
+ 
                             list.SelectElement(i.getCurrentItem());
                             if (!ch_box_intersec.Checked)
                                 break;
@@ -123,13 +110,8 @@ namespace ЛР4
                     }
                     pict_box.Refresh();
                 }
-            }
-            //if (e.Button == MouseButtons.Left)
-            //{
-            //    mouse_move = false;
-            //    history.Push(change_position_list);
-            //}
         }
+
 
         private void pict_box_Paint(object sender, PaintEventArgs e)
         {
@@ -375,7 +357,6 @@ namespace ЛР4
 
                 if (checkBox_line.Checked)
                 {
-                    //         CIterator<Element> j = figures.CreateIterator();
                     for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
                     {
                         if (i.getCurrentItem().Is_inside(e.X, e.Y))
@@ -390,7 +371,6 @@ namespace ЛР4
                             break;
                         }
                     }
-                    //return;
                 }
             }
         }
