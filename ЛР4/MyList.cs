@@ -32,7 +32,7 @@
             return new Standart_Iterator<T>(this);
         }
 
-		public void PushBack(T v)
+		public virtual void PushBack(T v)
 		{
 			if (v != null)
 			{
@@ -138,7 +138,7 @@
 				}
 				return -1;
 			}
-			public bool remove(T data)
+			public virtual bool remove(T data)
 			{
 				int f = find(data);
 				if (f == -1)

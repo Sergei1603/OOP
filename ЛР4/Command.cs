@@ -12,22 +12,25 @@ public abstract class command
 public class MoveCommand: command
 {
     shape selection;
-    int width;
-    int hight;
+    //int width;
+    //int hight;
     Mover[] movers;
 
     public void update_edgs(int width, int hight)
     {
-        this.width = width;
-        this.hight = hight;
+        //this.width = width;
+        //this.hight = hight;
+        movers[0].update_size(width, hight);
+        movers[1].update_size(width, hight);
     }
-    public MoveCommand(Mover[] movers, int width, int hight)
+    public MoveCommand(Mover[] movers)
     {
         selection = null;
-        this.width = width;
-        this.hight = hight;
+        //this.width = width;
+        //this.hight = hight;
         this.movers = movers;
-       
+        //movers[0].update_size(width, hight);
+        //movers[1].update_size(width, hight);
     }
     public override void execute(shape selection)
     {
@@ -35,10 +38,11 @@ public class MoveCommand: command
         if (selection != null)
         {
             selection.apply(movers[0]);
-            if(selection.outside(width, hight).Item1 != "inside")
-            {
-                unexecute();
-            }
+            //if(selection.outside(width, hight).Item1 != "inside")
+            //{
+            //    unexecute();
+            //}
+    //        selection.observable.NotifyObservers(movers[0], width, hight);
         }
     }
     public override void unexecute()
@@ -46,11 +50,12 @@ public class MoveCommand: command
         if (selection != null)
         {
             selection.apply(movers[1]);
+  //          selection.observable.NotifyObservers(movers[1], width, hight);
         }
     }
     public override command clone()
     {
-        return new MoveCommand(movers, width, hight);
+        return new MoveCommand(movers);
     }
 }
 
@@ -300,9 +305,10 @@ public class ChangePositionCommand : command
         this.selection = selection;
         if (selection != null)
         {
-            selection.change_position(dx, dy);
-            selection.corect_position(width, height);
-            sum_dx += dx;
+            selection.change_position(dx, dy, width, height);
+            //           selection.corect_position(width, height);
+            //           selection.observable.NotifyObservers(dx, dy, width, height);
+                     sum_dx += dx;
             sum_dy += dy;
         }
     }
@@ -310,7 +316,8 @@ public class ChangePositionCommand : command
     {
         if (selection != null)
         {
-            selection.change_position(-sum_dx, -sum_dy);
+            selection.change_position(-sum_dx, -sum_dy, width, height);
+      //      selection.observable.NotifyObservers(-sum_dx, -sum_dy, width, height);
         }
     }
     public override command clone()

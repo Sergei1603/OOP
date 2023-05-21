@@ -4,17 +4,26 @@ using System.Windows.Forms;
 using static List;
 public class Group: shape
 {
-    public MyList<shape> groups = new MyList<shape>();
+    public MyShapeList groups = new MyShapeList();
 
     public Group()
     {
         _check = true;
     }
-    public override void change_position(int x, int y)
+
+    public override Point get_center()
+    {
+        return groups.first.val.get_center();
+    }
+    public override string get_name()
+    {
+        return "Группа";
+    }
+    public override void change_position(int x, int y, int width, int height)
     {
         for (Iterator<shape> i = groups.CreateIterator(); !i.isEOL(); i.next())
         {
-            i.getCurrentItem().change_position(x, y);
+            i.getCurrentItem().change_position(x, y, width, height);
         }
     }
     public MyList<shape> delete_group()

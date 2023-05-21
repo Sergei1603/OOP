@@ -5,12 +5,15 @@ using System.Drawing;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace ЛР4
 {
     public partial class Form1 : Form
     {
-        public MyList<shape> list;
+        //        public MyList<shape> list;
+        public MyShapeList list = new MyShapeList();
         Stack<MyList<command>> history;
         Dictionary<Keys, command> map = new Dictionary<Keys, command>();
         storage storage;
@@ -21,30 +24,59 @@ namespace ЛР4
         int x;
         int y;
         MyList<command> change_position_list;
+        shape current;
+        TreeHandler treeHandler;
 
         public Form1()
         {
 
             InitializeComponent();
             this.KeyPreview = true;
-            list = new MyList<shape>();
+            list = new MyShapeList();
+            //            list = new MyList<shape>();
             history = new Stack<MyList<command>>();
-            Mover[] A = { new Mover(Keys.A), new Mover(Keys.D) };
-            Mover[] D = { new Mover(Keys.D), new Mover(Keys.A) };
-            Mover[] W = { new Mover(Keys.W), new Mover(Keys.S) };
-            Mover[] S = { new Mover(Keys.S), new Mover(Keys.W) };
+            Mover[] A = { new Mover(Keys.A, pict_box.Width, pict_box.Height), new Mover(Keys.D, pict_box.Width, pict_box.Height) };
+            Mover[] D = { new Mover(Keys.D, pict_box.Width, pict_box.Height), new Mover(Keys.A, pict_box.Width, pict_box.Height) };
+            Mover[] W = { new Mover(Keys.W, pict_box.Width, pict_box.Height), new Mover(Keys.S, pict_box.Width, pict_box.Height) };
+            Mover[] S = { new Mover(Keys.S, pict_box.Width, pict_box.Height), new Mover(Keys.W, pict_box.Width, pict_box.Height) };
             map[Keys.Delete] = new DeleteCommand(list);
-            map[Keys.A] = new MoveCommand(A, pict_box.Width, pict_box.Height);
-            map[Keys.D] = new MoveCommand(D, pict_box.Width, pict_box.Height);
-            map[Keys.W] = new MoveCommand(W, pict_box.Width, pict_box.Height);
-            map[Keys.S] = new MoveCommand(S, pict_box.Width, pict_box.Height);
+            map[Keys.A] = new MoveCommand(A);
+            map[Keys.D] = new MoveCommand(D);
+            map[Keys.W] = new MoveCommand(W);
+            map[Keys.S] = new MoveCommand(S);
             storage = new storage(list);
             changer_color = new Changer_color(Color.Green);
             resizer = new Resizer(20);
+            //         list.observers += new System.EventHandler(this.processNode);
+            treeHandler = new TreeHandler(treeView_shapes);
 
+            list.AddObserver(treeHandler);
+
+            treeHandler.AddObserver(list);
         }
 
 
+        private TreeNode calculate(shape shape)
+        {
+            TreeNode NodeShape;
+            if (shape is Group)
+            {
+                Group g = (Group)shape;
+                NodeShape = new TreeNode("Группа");
+                for (Iterator<shape> i = g.groups.CreateIterator(); !i.isEOL(); i.next())
+                    NodeShape.Nodes.Add(calculate(i.getCurrentItem()));
+
+            }
+            else
+            {
+                //                   TreeNode NodeShape = new TreeNode(list.last.val.get_name());
+                NodeShape = new TreeNode(shape.get_name());
+                NodeShape.Checked = true;
+                //               treeView_shapes.Nodes.Add(NodeShape);
+                //           return NodeShape;
+            }
+            return NodeShape;
+        }
         private void pict_box_MouseClick(object sender, MouseEventArgs e)
         {
             //     if (!checkBox_move.Checked)
@@ -54,37 +86,43 @@ namespace ЛР4
                 //    mouse_move = false;
                 //    history.Push(change_position_list);
                 //}
-                bool inside = false;
-                if (Control.ModifierKeys != Keys.Control && flag)
+     //           if (!checkBox_line.Checked)
                 {
+                    bool inside = false;
+                    if (Control.ModifierKeys != Keys.Control && flag)
+                    {
+                        //for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+                        //{
+                        //    //                       i.getCurrentItem().uncheck();
+                        //    list.DeselectElement(i.getCurrentItem());
+                        //}
+                        list.DeselectAll();
+                    }
+                    //             mouse_move = true;
                     for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
                     {
-                        i.getCurrentItem().uncheck();
+                        if (i.getCurrentItem().Is_inside(e.X, e.Y))
+                        {
+                            inside = true;
+                            //                       i.getCurrentItem().check();
+                            list.SelectElement(i.getCurrentItem());
+                            if (!ch_box_intersec.Checked)
+                                break;
+                        }
                     }
-                }
-                //             mouse_move = true;
-                for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
-                {
-                    if (i.getCurrentItem().Is_inside(e.X, e.Y))
+                    if (!inside && listBox_shape.Text != "" && flag && !checkBox_line.Checked)
                     {
-                        inside = true;
-                        i.getCurrentItem().check();
-                        if (!ch_box_intersec.Checked)
-                            break;
+                        Factory factory = new shapeFactory();
+                        shape shape = factory.create_shape(listBox_shape.Text, e.X, e.Y, (int)numericUpDown_size.Value, button_color.BackColor);
+                        shape.corect_position(pict_box.Width, pict_box.Height);
+                        MakeCommand command = new MakeCommand(list);
+                        command.execute(shape);
+                        MyList<command> list_command = new MyList<command>();
+                        list_command.PushBack(command);
+                        history.Push(list_command);
                     }
+                    pict_box.Refresh();
                 }
-                if (!inside && listBox_shape.Text != "" && flag)
-                {
-                    Factory factory = new shapeFactory();
-                    shape shape = factory.create_shape(listBox_shape.Text, e.X, e.Y, (int)numericUpDown_size.Value, button_color.BackColor);
-                    shape.corect_position(pict_box.Width, pict_box.Height);
-                    MakeCommand command = new MakeCommand(list);
-                    command.execute(shape);
-                    MyList<command> list_command = new MyList<command>();
-                    list_command.PushBack(command);
-                    history.Push(list_command);
-                }
-                pict_box.Refresh();
             }
             //if (e.Button == MouseButtons.Left)
             //{
@@ -276,12 +314,25 @@ namespace ЛР4
                 x = e.X;
                 y = e.Y;
                 change_position_list = new MyList<command>();
+                if (checkBox_line.Checked)
+                {
+                    //      CIterator<Element> j = figures.CreateIterator();
+                    for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+                    {
+                        if (i.getCurrentItem().Is_inside(e.X, e.Y))
+                        {
+                            current = i.getCurrentItem();
+                            return;
+                        }
+                    }
+                    return;
+                }
             }
         }
 
         private void pict_box_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouse_move)
+            if (mouse_move && !checkBox_line.Checked)
             {
                 bool inside = false;
                 for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
@@ -316,12 +367,56 @@ namespace ЛР4
             if (e.Button == MouseButtons.Left)
             {
                 mouse_move = false;
-                if(change_position_list.get_size()!= 0)
+                if (change_position_list.get_size() != 0)
                 {
                     history.Push(change_position_list);
                 }
                 flag = false;
+
+                if (checkBox_line.Checked)
+                {
+                    //         CIterator<Element> j = figures.CreateIterator();
+                    for (Iterator<shape> i = list.CreateIterator(); !i.isEOL(); i.next())
+                    {
+                        if (i.getCurrentItem().Is_inside(e.X, e.Y))
+                        {
+                            if (!current.observable.IsObserver(i.getCurrentItem()) && current != i.getCurrentItem())
+                            {
+                                current.observable.AddObserver(i.getCurrentItem());
+                                i.getCurrentItem().observer.AddPerent(current);
+                                pict_box.Refresh();
+
+                            }
+                            break;
+                        }
+                    }
+                    //return;
+                }
             }
         }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+            if (e.Action == TreeViewAction.ByMouse)
+            {
+                for (int i = 0; i < treeHandler.treeView.Nodes.Count; i++)
+                {
+                    treeHandler.treeView.Nodes[i].BackColor = Color.White;
+                }
+                TreeNode tmp = e.Node;
+                while (tmp.Parent != null)
+                {
+                    tmp = tmp.Parent;
+                }
+                tmp.BackColor = Color.Gray;
+                treeHandler.Notify();
+                //treeHandler.treeView.ExpandAll();
+            }
+            pict_box.Refresh();
+        }
+
+
     }
+
 }

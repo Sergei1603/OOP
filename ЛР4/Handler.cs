@@ -30,6 +30,8 @@ public class Drawer: Handler
         {
             e.Graphics.DrawEllipse(new Pen(System.Drawing.Color.Red, 3), circle.x - circle.size / 2, circle.y - circle.size / 2, circle.size, circle.size);
         }
+        circle.observer.Changed(e);
+        circle.observable.ToDefault();
     }
     public override void HandlePoligon(poligon_shape poligon)
     {
@@ -38,14 +40,25 @@ public class Drawer: Handler
         {
             e.Graphics.DrawPolygon(new Pen(System.Drawing.Color.Red, 3), poligon.calculate_vertex());
         }
+        poligon.observer.Changed(e);
+        poligon.observable.ToDefault();
     }
 }
 public class Mover : Handler
 {
     Keys key;
-    public Mover(Keys key)
+    int width;
+    int height;
+    public Mover(Keys key, int width, int height)
     {
         this.key = key;
+        this.width = width;
+        this.height = height;
+    }
+    public void update_size(int width, int height)
+    {
+        this.width = width;
+           this.height = height;
     }
     public override void HandleFigure(figure figure)
     {
@@ -64,6 +77,9 @@ public class Mover : Handler
                 figure.y += 5;
                 break;
         }
+
+        figure.corect_position(width, height);
+        figure.observable.NotifyObservers(this);
     }
 }
 

@@ -2,7 +2,14 @@
 
 public abstract class shape
 {
+    public observer observer;
+    public observable observable;
     public bool _check;
+    public shape()
+    {
+        observer = new observer();
+        observable = new observable();
+    }
     public virtual void uncheck()
     {
         _check = false;
@@ -20,7 +27,9 @@ public abstract class shape
     public abstract void save(StreamWriter sr);
     public abstract void load(StreamReader file, Factory factory, int c);
     public abstract void apply(Handler handler);
-    public abstract void change_position(int x, int y);
+    public abstract void change_position(int x, int y, int width, int height);
+    public abstract string get_name();
+    public abstract Point get_center();
 }
 
 public abstract class figure: shape
@@ -30,11 +39,19 @@ public abstract class figure: shape
     public int size;
     public Color _color = Color.Green;
 
-    public abstract string get_name();
-    public override void change_position(int x, int y)
+    public override Point get_center()
+    {
+        return new Point(x, y);
+    }
+
+    //    public abstract string get_name();
+    public override void change_position(int x, int y, int width, int height)
     {
         this.x += x;
         this.y += y;
+        corect_position(width, height);
+        observable.NotifyObservers(x, y, width, height);
+            observable.ToDefault();
     }
     public override void apply(Handler handler)
     {
@@ -123,6 +140,7 @@ public abstract class poligon_shape: figure
         {
             handler.HandleFigure(this);
         }
+
     }
 
     public override bool Is_inside(int x, int y)
